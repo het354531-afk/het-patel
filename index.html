@@ -1,200 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="gu">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Car Parking 100 - Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Het Patel | AI & Game Developer</title>
 <style>
-  body { margin: 0; background: #121212; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; user-select: none; touch-action: none; }
-  #hud { display: flex; justify-content: space-between; align-items: center; width: 310px; margin-bottom: 6px; color: #fff; font-size: 14px; font-weight: bold; background: #1e272e; padding: 6px 10px; border-radius: 8px; box-sizing: border-box; }
-  .gold { color: #ffeb3b; }
-  .green { color: #4cd137; }
-  #top { display: flex; justify-content: space-between; align-items: center; width: 310px; margin-bottom: 8px; color: #ffeb3b; font-size: 16px; font-weight: bold; }
-  button.top { background: #4caf50; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-  button.sound { background: #37474f; color: white; border: none; padding: 5px 8px; border-radius: 6px; font-size: 14px; cursor: pointer; }
-  canvas { background: #263238; border: 4px solid #fff; border-radius: 8px; }
-  .controls { display: flex; justify-content: space-between; width: 310px; margin-top: 12px; }
-  .box { display: flex; gap: 12px; }
-  .btn { width: 65px; height: 60px; font-size: 24px; border-radius: 12px; border: none; background: #ff9800; color: white; font-weight: bold; touch-action: none; }
-  .btn:active { transform: scale(0.95); opacity: 0.85; }
-  .blue { background: #2196f3; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f172a; color: #f8fafc; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 30px 16px; }
+  .badge { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+  h1 { font-size: 32px; margin-bottom: 12px; color: #fff; text-align: center; }
+  .intro { color: #cbd5e1; text-align: center; max-width: 480px; line-height: 1.6; font-size: 15px; margin-bottom: 30px; }
+  .cards { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 450px; }
+  .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+  .icon { font-size: 32px; margin-bottom: 10px; }
+  .card h2 { font-size: 20px; margin-bottom: 8px; color: #f1f5f9; }
+  .card p { color: #94a3b8; font-size: 14px; line-height: 1.5; margin-bottom: 18px; }
+  .btn { display: block; text-align: center; text-decoration: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 15px; transition: 0.2s; }
+  .btn-ai { background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; }
+  .btn-game { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; }
+  footer { margin-top: auto; padding-top: 35px; color: #64748b; font-size: 13px; }
 </style>
 </head>
 <body>
+  <div class="badge">✨ Creator & Developer</div>
+  <h1>Het Patel</h1>
+  <p class="intro">નમસ્તે! હું <strong>Het Patel</strong> છું. મેં બનાવેલા AI ટૂલ અને વેબ ગેમ્સ નીચે મુજબ છે — તમે સીધા અહીંથી જ તેનો ઉપયોગ કરી શકો છો.</p>
 
-<div id="hud">
-  <span class="gold" id="scoreTxt">Score: 0</span>
-  <span class="green" id="highTxt">Best: 0</span>
-  <button class="sound" id="sndBtn" onclick="toggleSound()">🔊</button>
-</div>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">🤖</div>
+      <h2>het AI - Smart Assistant</h2>
+      <p>ગુજરાતી અને અંગ્રેજીમાં સવાલોના જવાબ આપતું સ્માર્ટ AI ચેટબોટ, જેમાં વૉઇસ ટાઇપિંગ (માઇક) અને ચેટ હિસ્ટ્રી જેવા ફીચર્સ સામેલ છે.</p>
+      <a href="https://vercel.app" class="btn btn-ai">🚀 het AI ખોલો</a>
+    </div>
 
-<div id="top">
-  <span id="lvl">Level: 1 / 100</span>
-  <button class="top" onclick="nextLvl()">Next ⏭</button>
-</div>
-
-<canvas id="c" width="310" height="420"></canvas>
-
-<div class="controls">
-  <div class="box">
-    <button class="btn" id="btnL">◀</button>
-    <button class="btn" id="btnR">▶</button>
+    <div class="card">
+      <div class="icon">🏎</div>
+      <h2>Car Parking 100 - Pro</h2>
+      <p>૧૦૦ લેવલ, લાઈવ સ્કોર બોર્ડ, હાઈ-સ્કોર અને રિયલ સાઉન્ડ ઇફેક્ટ્સ સાથેની મજેદાર મોબાઈલ કાર પાર્કિંગ ગેમ.</p>
+      <a href="game.html" class="btn btn-game">🎮 ગેમ રમો</a>
+    </div>
   </div>
-  <div class="box">
-    <button class="btn blue" id="btnD">▼</button>
-    <button class="btn blue" id="btnU">▲</button>
-  </div>
-</div>
 
-<script>
-const c = document.getElementById("c"), ctx = c.getContext("2d");
-let level = 1, score = 0, highScore = Number(localStorage.getItem("het_car_best")) || 0;
-let soundOn = true, audioCtx = null;
-let k = {u:0, d:0, l:0, r:0};
-let car = {x: 60, y: 350, w: 30, h: 52, a: 0, sx: 0, sy: 0};
-let park = {x: 220, y: 30, w: 50, h: 70}, obs = [];
-let levelStartTime = Date.now();
-
-document.getElementById("highTxt").innerText = "Best: " + highScore;
-
-function bindBtn(id, key) {
-  const el = document.getElementById(id);
-  el.addEventListener("pointerdown", (e) => { e.preventDefault(); k[key] = 1; });
-  el.addEventListener("pointerup", (e) => { e.preventDefault(); k[key] = 0; });
-  el.addEventListener("pointerleave", (e) => { e.preventDefault(); k[key] = 0; });
-  el.addEventListener("pointercancel", (e) => { e.preventDefault(); k[key] = 0; });
-}
-bindBtn("btnL", "l");
-bindBtn("btnR", "r");
-bindBtn("btnU", "u");
-bindBtn("btnD", "d");
-
-function playSound(type) {
-  if (!soundOn) return;
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  const now = audioCtx.currentTime;
-
-  if (type === "crash") {
-    osc.type = "sawtooth";
-    osc.frequency.setValueAtTime(140, now);
-    osc.frequency.exponentialRampToValueAtTime(35, now + 0.35);
-    gain.gain.setValueAtTime(0.3, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
-    osc.start(now); osc.stop(now + 0.35);
-  } else if (type === "win") {
-    osc.type = "triangle";
-    osc.frequency.setValueAtTime(440, now);
-    osc.frequency.setValueAtTime(554, now + 0.1);
-    osc.frequency.setValueAtTime(659, now + 0.2);
-    gain.gain.setValueAtTime(0.25, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
-    osc.start(now); osc.stop(now + 0.45);
-  } else if (type === "engine") {
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(75, now);
-    gain.gain.setValueAtTime(0.04, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-    osc.start(now); osc.stop(now + 0.08);
-  }
-}
-
-function toggleSound() {
-  soundOn = !soundOn;
-  document.getElementById("sndBtn").innerText = soundOn ? "🔊" : "🔇";
-}
-
-function updateScore(pts) {
-  score = Math.max(0, score + pts);
-  if (score > highScore) {
-    highScore = score;
-    localStorage.setItem("het_car_best", highScore);
-  }
-  document.getElementById("scoreTxt").innerText = "Score: " + score;
-  document.getElementById("highTxt").innerText = "Best: " + highScore;
-}
-
-function load(n) {
-  k = {u:0, d:0, l:0, r:0}; obs = [];
-  levelStartTime = Date.now();
-  let sx = (n % 3 === 1) ? 60 : (n % 3 === 2 ? 155 : 250);
-  car = {x: sx, y: 360, w: 30, h: 52, a: 0, sx: 0, sy: 0};
-  let px = (n % 2 === 1) ? 225 : 35;
-  park = {x: px, y: 30, w: 50, h: 72};
-
-  obs.push({x: px > 100 ? px - 45 : px + 62, y: 38, w: 30, h: 52, col: "#e53935", vx: 0});
-  obs.push({x: (n % 2 === 1) ? 20 : 140, y: 150, w: 140, h: 20, col: "#90a4ae", vx: 0});
-  if (n >= 2) obs.push({x: 40, y: 245, w: 50, h: 24, col: "#ff5722", vx: Math.min(4, 1.5 + n * 0.03)});
-  if (n >= 4) obs.push({x: 200, y: 195, w: 45, h: 20, col: "#ab47bc", vx: -Math.min(3.5, 1.2 + n * 0.025)});
-  if (n >= 6) obs.push({x: (n % 2 === 1) ? 110 : 150, y: 95, w: 40, h: 16, col: "#fbc02d", vx: 0});
-
-  document.getElementById("lvl").innerText = "Level: " + n + " / 100";
-}
-
-function nextLvl() { level = level < 100 ? level + 1 : 1; load(level); }
-load(1);
-
-let frameCount = 0;
-function loop() {
-  frameCount++;
-  
-  // ડાયરેક્ટ ઉપર-નીચે અને ડાબે-જમણે મૂવમેન્ટ
-  if (k.u) { car.sy = -2.8; if (frameCount % 6 === 0) playSound("engine"); }
-  else if (k.d) { car.sy = 2.4; if (frameCount % 6 === 0) playSound("engine"); }
-  else car.sy *= 0.8;
-
-  if (k.l) { car.sx = -2.8; car.a = -0.15; if (frameCount % 6 === 0) playSound("engine"); }
-  else if (k.r) { car.sx = 2.8; car.a = 0.15; if (frameCount % 6 === 0) playSound("engine"); }
-  else { car.sx *= 0.8; car.a *= 0.7; }
-
-  car.x += car.sx;
-  car.y += car.sy;
-
-  if (car.x < 18 || car.x > 292 || car.y < 28 || car.y > 392) {
-    playSound("crash");
-    updateScore(-20);
-    alert("💥 દીવાલ સાથે અથડાયા! (-20 Score)");
-    load(level);
-  }
-
-  for (let o of obs) {
-    if (o.vx) { o.x += o.vx; if (o.x < 10 || o.x + o.w > 300) o.vx *= -1; }
-    if (car.x + 12 > o.x && car.x - 12 < o.x + o.w && car.y + 22 > o.y && car.y - 22 < o.y + o.h) {
-      playSound("crash");
-      updateScore(-20);
-      alert("💥 કાર અથડાઈ! (-20 Score)");
-      load(level);
-    }
-  }
-
-  let speed = Math.hypot(car.sx, car.sy);
-  if (car.x > park.x + 8 && car.x < park.x + park.w - 8 && car.y > park.y + 12 && car.y < park.y + park.h - 12 && speed < 0.4) {
-    playSound("win");
-    let timeTaken = Math.floor((Date.now() - levelStartTime) / 1000);
-    let bonus = Math.max(20, 100 - timeTaken * 2);
-    updateScore(bonus);
-    alert("🎉 Level " + level + " જીત્યા! (+" + bonus + " Score)");
-    nextLvl();
-  }
-
-  ctx.clearRect(0, 0, 310, 420);
-  ctx.strokeStyle = "#ffeb3b"; ctx.lineWidth = 4; ctx.strokeRect(park.x, park.y, park.w, park.h);
-  ctx.fillStyle = "#ffeb3b"; ctx.font = "bold 26px Arial"; ctx.fillText("P", park.x + 16, park.y + 45);
-
-  for (let o of obs) { ctx.fillStyle = o.col; ctx.fillRect(o.x, o.y, o.w, o.h); }
-
-  ctx.save(); ctx.translate(car.x, car.y); ctx.rotate(car.a);
-  ctx.fillStyle = "#00b0ff"; ctx.fillRect(-15, -26, 30, 52);
-  ctx.fillStyle = "#fff"; ctx.fillRect(-3, -24, 6, 48);
-  ctx.fillStyle = "#111"; ctx.fillRect(-11, -15, 22, 12);
-  ctx.restore();
-
-  requestAnimationFrame(loop);
-}
-loop();
-</script>
+  <footer>Made with ❤ by <strong>Het Patel</strong> • 2026</footer>
 </body>
 </html>
