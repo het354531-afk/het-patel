@@ -116,8 +116,9 @@
     keys = { up: false, down: false, left: false, right: false };
     obstacles = [];
 
-    const startPositions =;
-    const startX = startPositions[(lvl - 1) % 3];
+    let startX = 60;
+    if ((lvl - 1) % 3 === 1) startX = 155;
+    if ((lvl - 1) % 3 === 2) startX = 250;
     car = { x: startX, y: 360, w: 30, h: 54, angle: 0, speed: 0 };
 
     const parkSpots = [
