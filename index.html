@@ -2,290 +2,92 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Sports Car Parking 100</title>
+<title>Car Parking 100</title>
 <style>
-  body { margin: 0; background: #121212; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; }
-  #top-bar { display: flex; justify-content: space-between; align-items: center; width: 310px; margin-bottom: 8px; }
-  #info { color: #ffeb3b; font-size: 18px; font-weight: bold; }
-  .top-btns { display: flex; gap: 6px; }
-  #sound-btn { background: #2196f3; color: white; border: none; padding: 5px 8px; border-radius: 6px; font-size: 13px; font-weight: bold; }
-  #skip-btn { background: #4caf50; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 13px; font-weight: bold; }
+  body { margin: 0; background: #121212; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; font-family: Arial; }
+  #top { display: flex; justify-content: space-between; width: 310px; margin-bottom: 8px; color: #ffeb3b; font-size: 18px; font-weight: bold; }
+  button.top { background: #4caf50; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-weight: bold; }
   canvas { background: #263238; border: 4px solid #fff; border-radius: 8px; }
   .controls { display: flex; justify-content: space-between; width: 310px; margin-top: 15px; }
-  .steer, .pedals { display: flex; gap: 12px; }
-  .ctrl-btn {
-    width: 65px; height: 60px; font-size: 24px; border-radius: 12px; border: none;
-    background: #ff9800; color: white; font-weight: bold; user-select: none; -webkit-user-select: none;
-  }
-  .ctrl-btn:active { background: #e65100; }
-  .pedal-btn { background: #2196f3; }
-  .pedal-btn:active { background: #0d47a1; }
+  .box { display: flex; gap: 12px; }
+  .btn { width: 65px; height: 60px; font-size: 24px; border-radius: 12px; border: none; background: #ff9800; color: white; font-weight: bold; }
+  .blue { background: #2196f3; }
 </style>
 </head>
 <body>
 
-<div id="top-bar">
-  <div id="info">Level: 1 / 100</div>
-  <div class="top-btns">
-    <button id="sound-btn" onclick="toggleSound()">🔊 ON</button>
-    <button id="skip-btn" onclick="nextLevel()">Next ⏭</button>
-  </div>
+<div id="top">
+  <span id="lvl">Level: 1 / 100</span>
+  <button class="top" onclick="nextLvl()">Next ⏭</button>
 </div>
 
-<canvas id="game" width="310" height="420"></canvas>
+<canvas id="c" width="310" height="420"></canvas>
 
 <div class="controls">
-  <div class="steer">
-    <button class="ctrl-btn" ontouchstart="startDrive('left')" ontouchend="keys.left=false" onmousedown="startDrive('left')" onmouseup="keys.left=false">◀</button>
-    <button class="ctrl-btn" ontouchstart="startDrive('right')" ontouchend="keys.right=false" onmousedown="startDrive('right')" onmouseup="keys.right=false">▶</button>
+  <div class="box">
+    <button class="btn" ontouchstart="k.l=1" ontouchend="k.l=0" onmousedown="k.l=1" onmouseup="k.l=0">◀</button>
+    <button class="btn" ontouchstart="k.r=1" ontouchend="k.r=0" onmousedown="k.r=1" onmouseup="k.r=0">▶</button>
   </div>
-  <div class="pedals">
-    <button class="ctrl-btn pedal-btn" ontouchstart="startDrive('down')" ontouchend="keys.down=false" onmousedown="startDrive('down')" onmouseup="keys.down=false">▼</button>
-    <button class="ctrl-btn pedal-btn" ontouchstart="startDrive('up')" ontouchend="keys.up=false" onmousedown="startDrive('up')" onmouseup="keys.up=false">▲</button>
+  <div class="box">
+    <button class="btn blue" ontouchstart="k.d=1" ontouchend="k.d=0" onmousedown="k.d=1" onmouseup="k.d=0">▼</button>
+    <button class="btn blue" ontouchstart="k.u=1" ontouchend="k.u=0" onmousedown="k.u=1" onmouseup="k.u=0">▲</button>
   </div>
 </div>
 
 <script>
-  const canvas = document.getElementById("game");
-  const ctx = canvas.getContext("2d");
+const c = document.getElementById("c"), ctx = c.getContext("2d");
+let level = 1, k = {u:0, d:0, l:0, r:0};
+let car = {x: 60, y: 350, w: 30, h: 52, a: 0, s: 0};
+let park = {x: 220, y: 30, w: 50, h: 70}, obs = [];
 
-  let level = 1;
-  const maxLevels = 100;
-  let keys = { up: false, down: false, left: false, right: false };
-  let car = { x: 60, y: 350, w: 30, h: 54, angle: 0, speed: 0 };
-  let parking = {};
-  let obstacles = [];
+function load(n) {
+  k = {u:0, d:0, l:0, r:0}; obs = [];
+  let sx = (n % 3 === 1) ? 60 : (n % 3 === 2 ? 155 : 250);
+  car = {x: sx, y: 360, w: 30, h: 52, a: 0, s: 0};
+  let px = (n % 2 === 1) ? 225 : 35;
+  park = {x: px, y: 30, w: 50, h: 72};
+  obs.push({x: px > 100 ? px - 45 : px + 62, y: 38, w: 30, h: 52, col: "#e53935", vx: 0});
+  obs.push({x: (n % 2 === 1) ? 20 : 140, y: 150, w: 140, h: 20, col: "#90a4ae", vx: 0});
+  if (n >= 2) obs.push({x: 40, y: 245, w: 50, h: 26, col: "#ff5722", vx: Math.min(4, 1.5 + n * 0.03)});
+  document.getElementById("lvl").innerText = "Level: " + n + " / 100";
+}
+function nextLvl() { level = level < 100 ? level + 1 : 1; load(level); }
+load(1);
 
-  let audioCtx = null;
-  let soundOn = true;
+function loop() {
+  if (k.u) car.s = 2.7; else if (k.d) car.s = -2.1; else car.s *= 0.85;
+  if (Math.abs(car.s) > 0.2) {
+    let dir = car.s > 0 ? 1 : -1;
+    if (k.l) car.a -= 0.05 * dir;
+    if (k.r) car.a += 0.05 * dir;
+  }
+  car.x += Math.sin(car.a) * car.s;
+  car.y -= Math.cos(car.a) * car.s;
 
-  function initAudio() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === "suspended") audioCtx.resume();
+  if (car.x < 18 || car.x > 292 || car.y < 22 || car.y > 398) { alert("💥 અથડાયા!"); load(level); }
+  for (let o of obs) {
+    if (o.vx) { o.x += o.vx; if (o.x < 10 || o.x + o.w > 300) o.vx *= -1; }
+    if (car.x + 12 > o.x && car.x - 12 < o.x + o.w && car.y + 18 > o.y && car.y - 18 < o.y + o.h) { alert("💥 કાર અથડાઈ!"); load(level); }
+  }
+  if (car.x > park.x + 8 && car.x < park.x + park.w - 8 && car.y > park.y + 12 && car.y < park.y + park.h - 12 && Math.abs(car.s) < 0.3) {
+    alert("🎉 Level " + level + " જીત્યા!"); nextLvl();
   }
 
-  function toggleSound() {
-    soundOn = !soundOn;
-    document.getElementById("sound-btn").innerText = soundOn ? "🔊 ON" : "🔇 OFF";
-  }
+  ctx.clearRect(0, 0, 310, 420);
+  ctx.strokeStyle = "#ffeb3b"; ctx.lineWidth = 4; ctx.strokeRect(park.x, park.y, park.w, park.h);
+  ctx.fillStyle = "#ffeb3b"; ctx.font = "bold 26px Arial"; ctx.fillText("P", park.x + 16, park.y + 45);
 
-  function playSound(type) {
-    if (!soundOn || !audioCtx) return;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    const now = audioCtx.currentTime;
+  for (let o of obs) { ctx.fillStyle = o.col; ctx.fillRect(o.x, o.y, o.w, o.h); }
 
-    if (type === "engine") {
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(75, now);
-      osc.frequency.linearRampToValueAtTime(110, now + 0.12);
-      gain.gain.setValueAtTime(0.06, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
-      osc.start(now);
-      osc.stop(now + 0.13);
-    } else if (type === "crash") {
-      osc.type = "square";
-      osc.frequency.setValueAtTime(130, now);
-      osc.frequency.exponentialRampToValueAtTime(30, now + 0.35);
-      gain.gain.setValueAtTime(0.25, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-      osc.start(now);
-      osc.stop(now + 0.35);
-    } else if (type === "win") {
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(440, now);
-      osc.frequency.setValueAtTime(554, now + 0.1);
-      osc.frequency.setValueAtTime(659, now + 0.2);
-      gain.gain.setValueAtTime(0.2, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-      osc.start(now);
-      osc.stop(now + 0.45);
-    }
-  }
+  ctx.save(); ctx.translate(car.x, car.y); ctx.rotate(car.a);
+  ctx.fillStyle = "#00b0ff"; ctx.fillRect(-15, -26, 30, 52);
+  ctx.fillStyle = "#fff"; ctx.fillRect(-3, -24, 6, 48);
+  ctx.fillStyle = "#111"; ctx.fillRect(-11, -15, 22, 12);
+  ctx.restore();
 
-  function startDrive(dir) {
-    initAudio();
-    keys[dir] = true;
-  }
-
-  function loadLevel(lvl) {
-    keys = { up: false, down: false, left: false, right: false };
-    obstacles = [];
-
-    let startX = 60;
-    if ((lvl - 1) % 3 === 1) startX = 155;
-    if ((lvl - 1) % 3 === 2) startX = 250;
-    car = { x: startX, y: 360, w: 30, h: 54, angle: 0, speed: 0 };
-
-    const parkSpots = [
-      { x: 225, y: 30, w: 50, h: 72 },
-      { x: 35,  y: 30, w: 50, h: 72 },
-      { x: 130, y: 30, w: 50, h: 72 },
-      { x: 225, y: 165, w: 50, h: 72 },
-      { x: 35,  y: 165, w: 50, h: 72 }
-    ];
-    parking = parkSpots[(lvl * 2) % parkSpots.length];
-
-    const colors = ["#e53935", "#43a047", "#8e24aa", "#fdd835", "#00acc1"];
-    if (parking.x > 100) {
-      obstacles.push({ x: parking.x - 45, y: parking.y + 8, w: 30, h: 54, color: colors[lvl % 5], vx: 0 });
-    }
-    if (parking.x < 200) {
-      obstacles.push({ x: parking.x + 62, y: parking.y + 8, w: 30, h: 54, color: colors[(lvl + 2) % 5], vx: 0 });
-    }
-
-    let wallCount = Math.min(3, Math.floor((lvl - 1) / 10) + 1);
-    for (let i = 0; i < wallCount; i++) {
-      let wy = 130 + i * 75;
-      if (Math.abs(wy - parking.y) > 65) {
-        let wallW = 95 + ((lvl * 17 + i * 31) % 75);
-        let wallX = ((lvl + i) % 2 === 0) ? 15 : (canvas.width - wallW - 15);
-        obstacles.push({ x: wallX, y: wy, w: wallW, h: 20, color: "#90a4ae", vx: 0 });
-      }
-    }
-
-    if (lvl >= 3) {
-      let trafficSpeed = Math.min(4.2, 1.3 + (lvl * 0.03));
-      let trafficY = (parking.y > 120) ? 110 : 255;
-      obstacles.push({ x: 40, y: trafficY, w: 48, h: 26, color: "#ff5722", vx: trafficSpeed });
-    }
-
-    if (lvl >= 20 && parking.y < 100) {
-      let speed2 = Math.min(4.5, 1.5 + (lvl * 0.025));
-      obstacles.push({ x: 200, y: 175, w: 48, h: 26, color: "#ec407a", vx: -speed2 });
-    }
-
-    document.getElementById("info").innerText = "Level: " + lvl + " / " + maxLevels;
-  }
-
-  function nextLevel() {
-    initAudio();
-    if (level < maxLevels) {
-      level++;
-      loadLevel(level);
-    } else {
-      level = 1;
-      loadLevel(1);
-    }
-  }
-
-  loadLevel(1);
-  let frameCount = 0;
-
-  function update() {
-    frameCount++;
-    if (keys.up) {
-      car.speed = 2.7;
-      if (frameCount % 8 === 0) playSound("engine");
-    } else if (keys.down) {
-      car.speed = -2.1;
-      if (frameCount % 10 === 0) playSound("engine");
-    } else {
-      car.speed *= 0.85;
-    }
-
-    if (Math.abs(car.speed) > 0.2) {
-      let dir = car.speed > 0 ? 1 : -1;
-      if (keys.left) car.angle -= 0.052 * dir;
-      if (keys.right) car.angle += 0.052 * dir;
-    }
-
-    car.x += Math.sin(car.angle) * car.speed;
-    car.y -= Math.cos(car.angle) * car.speed;
-
-    if (car.x < 18 || car.x > canvas.width - 18 || car.y < 22 || car.y > canvas.height - 22) {
-      playSound("crash");
-      alert("💥 દીવાલ સાથે અથડાયા! Level " + level + " ફરી રમો.");
-      loadLevel(level);
-      return;
-    }
-
-    for (let obs of obstacles) {
-      if (obs.vx !== 0) {
-        obs.x += obs.vx;
-        if (obs.x < 10 || obs.x + obs.w > canvas.width - 10) obs.vx *= -1;
-      }
-      if (car.x + 12 > obs.x && car.x - 12 < obs.x + obs.w &&
-          car.y + 18 > obs.y && car.y - 18 < obs.y + obs.h) {
-        playSound("crash");
-        alert("💥 કાર અથડાઈ ગઈ! Level " + level + " ફરી રમો.");
-        loadLevel(level);
-        return;
-      }
-    }
-
-    if (car.x > parking.x + 8 && car.x < parking.x + parking.w - 8 &&
-        car.y > parking.y + 12 && car.y < parking.y + parking.h - 12 &&
-        Math.abs(car.speed) < 0.3) {
-      playSound("win");
-      if (level < maxLevels) {
-        alert("🎉 શાબાશ! Level " + level + " પૂરું થયું!");
-        level++;
-        loadLevel(level);
-      } else {
-        alert("🏆 મહા-ચેમ્પિયન! તમે પૂરા 100 લેવલ જીતી લીધા છે!");
-        level = 1;
-        loadLevel(1);
-      }
-    }
-  }
-
-  function drawSportsCar(x, y, w, h, angle, bodyColor) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(angle);
-
-    ctx.fillStyle = "#111";
-    ctx.fillRect(-w / 2 - 3, -h / 2 + 7, 4, 11);
-    ctx.fillRect(w / 2 - 1, -h / 2 + 7, 4, 11);
-    ctx.fillRect(-w / 2 - 3, h / 2 - 18, 4, 11);
-    ctx.fillRect(w / 2 - 1, h / 2 - 18, 4, 11);
-
-    ctx.fillStyle = bodyColor;
-    ctx.beginPath();
-    ctx.roundRect(-w / 2, -h / 2, w, h, 7);
-    ctx.fill();
-
-    ctx.fillStyle = "rgba(255,255,255,0.85)";
-    ctx.fillRect(-4, -h / 2 + 2, 3, h - 4);
-    ctx.fillRect(1, -h / 2 + 2, 3, h - 4);
-
-    ctx.fillStyle = "#102027";
-    ctx.fillRect(-w / 2 + 4, -h / 2 + 12, w - 8, 12);
-    ctx.fillRect(-w / 2 + 5, h / 2 - 16, w - 10, 8);
-
-    ctx.fillStyle = "#111";
-    ctx.fillRect(-w / 2 - 1, h / 2 - 4, w + 2, 4);
-
-    ctx.fillStyle = "#fff59d";
-    ctx.fillRect(-w / 2 + 3, -h / 2, 6, 3);
-    ctx.fillRect(w / 2 - 9, -h / 2, 6, 3);
-    ctx.fillStyle = "#ff1744";
-    ctx.fillRect(-w / 2 + 3, h / 2 - 2, 6, 3);
-    ctx.fillRect(w / 2 - 9, h / 2 - 2, 6, 3);
-
-    ctx.restore();
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.strokeStyle = "#ffeb3b";
-    ctx.lineWidth = 4;
-    ctx.strokeRect(parking.x, parking.y, parking.w, parking.h);
-    ctx.fillStyle = "rgba(255, 235, 59, 0.18)";
-    ctx.fillRect(parking.x, parking.y, parking.w, parking.h);
-    ctx.fillStyle = "#ffeb3b";
-    ctx.font = "bold 26px Arial";
-    ctx.fillText("P", parking.x + 16, parking.y + 45);
-
-    for (let obs of obstacles) {
-      if (obs.h > 40) {
-        drawSportsCar(obs.x + obs.w / 2, obs.y + obs.h / 2, obs.w, obs.h, 0, obs.color);
-      } else {
-
-  
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
