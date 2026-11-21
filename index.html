@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Car Parking 100 - Pro</title>
 <style>
-  body { margin: 0; background: #121212; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; user-select: none; }
+  body { margin: 0; background: #121212; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; user-select: none; touch-action: none; }
   #hud { display: flex; justify-content: space-between; align-items: center; width: 310px; margin-bottom: 6px; color: #fff; font-size: 14px; font-weight: bold; background: #1e272e; padding: 6px 10px; border-radius: 8px; box-sizing: border-box; }
   .gold { color: #ffeb3b; }
   .green { color: #4cd137; }
@@ -15,8 +15,8 @@
   canvas { background: #263238; border: 4px solid #fff; border-radius: 8px; }
   .controls { display: flex; justify-content: space-between; width: 310px; margin-top: 12px; }
   .box { display: flex; gap: 12px; }
-  .btn { width: 65px; height: 60px; font-size: 24px; border-radius: 12px; border: none; background: #ff9800; color: white; font-weight: bold; }
-  .btn:active { transform: scale(0.95); }
+  .btn { width: 65px; height: 60px; font-size: 24px; border-radius: 12px; border: none; background: #ff9800; color: white; font-weight: bold; touch-action: none; }
+  .btn:active { transform: scale(0.95); opacity: 0.85; }
   .blue { background: #2196f3; }
 </style>
 </head>
@@ -37,12 +37,12 @@
 
 <div class="controls">
   <div class="box">
-    <button class="btn" ontouchstart="k.l=1" ontouchend="k.l=0" onmousedown="k.l=1" onmouseup="k.l=0">◀</button>
-    <button class="btn" ontouchstart="k.r=1" ontouchend="k.r=0" onmousedown="k.r=1" onmouseup="k.r=0">▶</button>
+    <button class="btn" id="btnL">◀</button>
+    <button class="btn" id="btnR">▶</button>
   </div>
   <div class="box">
-    <button class="btn blue" ontouchstart="k.d=1" ontouchend="k.d=0" onmousedown="k.d=1" onmouseup="k.d=0">▼</button>
-    <button class="btn blue" ontouchstart="k.u=1" ontouchend="k.u=0" onmousedown="k.u=1" onmouseup="k.u=0">▲</button>
+    <button class="btn blue" id="btnD">▼</button>
+    <button class="btn blue" id="btnU">▲</button>
   </div>
 </div>
 
@@ -57,7 +57,19 @@ let levelStartTime = Date.now();
 
 document.getElementById("highTxt").innerText = "Best: " + highScore;
 
-// Web Audio API Sound Generator (કોઈ અલગ ફાઇલ વગર અવાજ)
+// મલ્ટી-ટચ બટન સેટઅપ
+function bindBtn(id, key) {
+  const el = document.getElementById(id);
+  el.addEventListener("pointerdown", (e) => { e.preventDefault(); k[key] = 1; });
+  el.addEventListener("pointerup", (e) => { e.preventDefault(); k[key] = 0; });
+  el.addEventListener("pointerleave", (e) => { e.preventDefault(); k[key] = 0; });
+  el.addEventListener("pointercancel", (e) => { e.preventDefault(); k[key] = 0; });
+}
+bindBtn("btnL", "l");
+bindBtn("btnR", "r");
+bindBtn("btnU", "u");
+bindBtn("btnD", "d");
+
 function playSound(type) {
   if (!soundOn) return;
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -114,15 +126,10 @@ function load(n) {
   let px = (n % 2 === 1) ? 225 : 35;
   park = {x: px, y: 30, w: 50, h: 72};
 
-  // પાર્કિંગ બાજુમાં ઉભેલી કાર
   obs.push({x: px > 100 ? px - 45 : px + 62, y: 38, w: 30, h: 52, col: "#e53935", vx: 0});
-  // વચ્ચેની દીવાલ
   obs.push({x: (n % 2 === 1) ? 20 : 140, y: 150, w: 140, h: 20, col: "#90a4ae", vx: 0});
-  // લેવલ 2 થી ફરતો અવરોધ
   if (n >= 2) obs.push({x: 40, y: 245, w: 50, h: 24, col: "#ff5722", vx: Math.min(4, 1.5 + n * 0.03)});
-  // લેવલ 4 થી બીજો સામસામે ફરતો અવરોધ (નવું!)
   if (n >= 4) obs.push({x: 200, y: 195, w: 45, h: 20, col: "#ab47bc", vx: -Math.min(3.5, 1.2 + n * 0.025)});
-  // લેવલ 6 થી પાર્કિંગ પાસે સાંકડો ગેટ (નવું!)
   if (n >= 6) obs.push({x: (n % 2 === 1) ? 110 : 150, y: 95, w: 40, h: 16, col: "#fbc02d", vx: 0});
 
   document.getElementById("lvl").innerText = "Level: " + n + " / 100";
@@ -136,12 +143,13 @@ function loop() {
   frameCount++;
   if (k.u) { car.s = 2.7; if (frameCount % 6 === 0) playSound("engine"); }
   else if (k.d) { car.s = -2.1; if (frameCount % 6 === 0) playSound("engine"); }
+  else if (k.l || k.r) { car.s = 1.2; } // ફક્ત સાઈડ બટન દબાવો તો પણ ધીમેથી વળશે
   else car.s *= 0.85;
 
-  if (Math.abs(car.s) > 0.2) {
-    let dir = car.s > 0 ? 1 : -1;
-    if (k.l) car.a -= 0.05 * dir;
-    if (k.r) car.a += 0.05 * dir;
+  if (Math.abs(car.s) > 0.1) {
+    let dir = car.s >= 0 ? 1 : -1;
+    if (k.l) car.a -= 0.055 * dir;
+    if (k.r) car.a += 0.055 * dir;
   }
   car.x += Math.sin(car.a) * car.s;
   car.y -= Math.cos(car.a) * car.s;
