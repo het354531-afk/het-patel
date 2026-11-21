@@ -51,13 +51,12 @@ const c = document.getElementById("c"), ctx = c.getContext("2d");
 let level = 1, score = 0, highScore = Number(localStorage.getItem("het_car_best")) || 0;
 let soundOn = true, audioCtx = null;
 let k = {u:0, d:0, l:0, r:0};
-let car = {x: 60, y: 350, w: 30, h: 52, a: 0, s: 0};
+let car = {x: 60, y: 350, w: 30, h: 52, a: 0, sx: 0, sy: 0};
 let park = {x: 220, y: 30, w: 50, h: 70}, obs = [];
 let levelStartTime = Date.now();
 
 document.getElementById("highTxt").innerText = "Best: " + highScore;
 
-// મલ્ટી-ટચ બટન સેટઅપ
 function bindBtn(id, key) {
   const el = document.getElementById(id);
   el.addEventListener("pointerdown", (e) => { e.preventDefault(); k[key] = 1; });
@@ -122,7 +121,7 @@ function load(n) {
   k = {u:0, d:0, l:0, r:0}; obs = [];
   levelStartTime = Date.now();
   let sx = (n % 3 === 1) ? 60 : (n % 3 === 2 ? 155 : 250);
-  car = {x: sx, y: 360, w: 30, h: 52, a: 0, s: 0};
+  car = {x: sx, y: 360, w: 30, h: 52, a: 0, sx: 0, sy: 0};
   let px = (n % 2 === 1) ? 225 : 35;
   park = {x: px, y: 30, w: 50, h: 72};
 
@@ -141,20 +140,20 @@ load(1);
 let frameCount = 0;
 function loop() {
   frameCount++;
-  if (k.u) { car.s = 2.7; if (frameCount % 6 === 0) playSound("engine"); }
-  else if (k.d) { car.s = -2.1; if (frameCount % 6 === 0) playSound("engine"); }
-  else if (k.l || k.r) { car.s = 1.2; } // ફક્ત સાઈડ બટન દબાવો તો પણ ધીમેથી વળશે
-  else car.s *= 0.85;
+  
+  // ડાયરેક્ટ ઉપર-નીચે અને ડાબે-જમણે મૂવમેન્ટ
+  if (k.u) { car.sy = -2.8; if (frameCount % 6 === 0) playSound("engine"); }
+  else if (k.d) { car.sy = 2.4; if (frameCount % 6 === 0) playSound("engine"); }
+  else car.sy *= 0.8;
 
-  if (Math.abs(car.s) > 0.1) {
-    let dir = car.s >= 0 ? 1 : -1;
-    if (k.l) car.a -= 0.055 * dir;
-    if (k.r) car.a += 0.055 * dir;
-  }
-  car.x += Math.sin(car.a) * car.s;
-  car.y -= Math.cos(car.a) * car.s;
+  if (k.l) { car.sx = -2.8; car.a = -0.15; if (frameCount % 6 === 0) playSound("engine"); }
+  else if (k.r) { car.sx = 2.8; car.a = 0.15; if (frameCount % 6 === 0) playSound("engine"); }
+  else { car.sx *= 0.8; car.a *= 0.7; }
 
-  if (car.x < 18 || car.x > 292 || car.y < 22 || car.y > 398) {
+  car.x += car.sx;
+  car.y += car.sy;
+
+  if (car.x < 18 || car.x > 292 || car.y < 28 || car.y > 392) {
     playSound("crash");
     updateScore(-20);
     alert("💥 દીવાલ સાથે અથડાયા! (-20 Score)");
@@ -163,7 +162,7 @@ function loop() {
 
   for (let o of obs) {
     if (o.vx) { o.x += o.vx; if (o.x < 10 || o.x + o.w > 300) o.vx *= -1; }
-    if (car.x + 12 > o.x && car.x - 12 < o.x + o.w && car.y + 18 > o.y && car.y - 18 < o.y + o.h) {
+    if (car.x + 12 > o.x && car.x - 12 < o.x + o.w && car.y + 22 > o.y && car.y - 22 < o.y + o.h) {
       playSound("crash");
       updateScore(-20);
       alert("💥 કાર અથડાઈ! (-20 Score)");
@@ -171,7 +170,8 @@ function loop() {
     }
   }
 
-  if (car.x > park.x + 8 && car.x < park.x + park.w - 8 && car.y > park.y + 12 && car.y < park.y + park.h - 12 && Math.abs(car.s) < 0.3) {
+  let speed = Math.hypot(car.sx, car.sy);
+  if (car.x > park.x + 8 && car.x < park.x + park.w - 8 && car.y > park.y + 12 && car.y < park.y + park.h - 12 && speed < 0.4) {
     playSound("win");
     let timeTaken = Math.floor((Date.now() - levelStartTime) / 1000);
     let bonus = Math.max(20, 100 - timeTaken * 2);
