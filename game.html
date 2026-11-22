@@ -1,23 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="gu">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Car Parking 100 - Pro</title>
+<title>Car Parking 100 - Pro | Het Patel</title>
 <style>
-  body { margin: 0; background: #121212; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; user-select: none; touch-action: none; }
-  #hud { display: flex; justify-content: space-between; align-items: center; width: 310px; margin-bottom: 6px; color: #fff; font-size: 14px; font-weight: bold; background: #1e272e; padding: 6px 10px; border-radius: 8px; box-sizing: border-box; }
+  body { margin: 0; background: #121212; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100dvh; overflow: hidden; font-family: Arial, sans-serif; user-select: none; touch-action: none; }
+  #hud { display: flex; justify-content: space-between; align-items: center; width: 310px; margin-bottom: 5px; color: #fff; font-size: 13px; font-weight: bold; background: #1e272e; padding: 6px 10px; border-radius: 8px; box-sizing: border-box; }
   .gold { color: #ffeb3b; }
   .green { color: #4cd137; }
-  #top { display: flex; justify-content: space-between; align-items: center; width: 310px; margin-bottom: 8px; color: #ffeb3b; font-size: 16px; font-weight: bold; }
-  button.top { background: #4caf50; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-  button.sound { background: #37474f; color: white; border: none; padding: 5px 8px; border-radius: 6px; font-size: 14px; cursor: pointer; }
+  .red { color: #ff5252; }
+  #modeBar { width: 310px; text-align: center; background: #0d47a1; color: #fff; font-size: 12px; font-weight: bold; padding: 4px 0; border-radius: 6px; margin-bottom: 5px; letter-spacing: 0.5px; }
+  #top { display: flex; justify-content: space-between; align-items: center; width: 310px; margin-bottom: 6px; color: #ffeb3b; font-size: 15px; font-weight: bold; }
+  button.top { background: #4caf50; color: white; border: none; padding: 5px 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; }
+  button.lvl-btn { background: #0288d1; color: white; border: none; padding: 5px 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; }
+  button.sound { background: #37474f; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 14px; cursor: pointer; }
   canvas { background: #263238; border: 4px solid #fff; border-radius: 8px; }
-  .controls { display: flex; justify-content: space-between; width: 310px; margin-top: 12px; }
+  .controls { display: flex; justify-content: space-between; width: 310px; margin-top: 10px; }
   .box { display: flex; gap: 12px; }
-  .btn { width: 65px; height: 60px; font-size: 24px; border-radius: 12px; border: none; background: #ff9800; color: white; font-weight: bold; touch-action: none; }
+  .btn { width: 65px; height: 58px; font-size: 24px; border-radius: 12px; border: none; background: #ff9800; color: white; font-weight: bold; touch-action: none; }
   .btn:active { transform: scale(0.95); opacity: 0.85; }
   .blue { background: #2196f3; }
+
+  /* Level Picker Modal */
+  #lvlModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; z-index: 50; }
+  .modal-box { background: #1e272e; border: 2px solid #ffeb3b; border-radius: 12px; padding: 14px; width: 290px; text-align: center; color: #fff; }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-height: 250px; overflow-y: auto; margin: 10px 0; }
+  .g-btn { background: #263238; color: #fff; border: 1px solid #546e7a; padding: 7px 0; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; }
+  .g-btn.active { background: #ff9800; color: #000; border-color: #fff; }
 </style>
 </head>
 <body>
@@ -25,12 +35,18 @@
 <div id="hud">
   <span class="gold" id="scoreTxt">Score: 0</span>
   <span class="green" id="highTxt">Best: 0</span>
+  <span class="red" id="timerTxt" style="display:none;">⏱ 45s</span>
   <button class="sound" id="sndBtn" onclick="toggleSound()">🔊</button>
 </div>
 
+<div id="modeBar">🏙️ Mode 1: City Parking (Level 1-20)</div>
+
 <div id="top">
   <span id="lvl">Level: 1 / 100</span>
-  <button class="top" onclick="nextLvl()">Next ⏭</button>
+  <div>
+    <button class="lvl-btn" onclick="openLevels()">📋 Levels</button>
+    <button class="top" onclick="nextLvl()">Next ⏭</button>
+  </div>
 </div>
 
 <canvas id="c" width="310" height="420"></canvas>
@@ -46,14 +62,25 @@
   </div>
 </div>
 
+<!-- Level Selector -->
+<div id="lvlModal">
+  <div class="modal-box">
+    <div style="font-weight:bold; color:#ffeb3b; font-size:15px;">લેવલ પસંદ કરો (1 - 100)</div>
+    <div style="font-size:11px; color:#b0bec5; margin-top:4px;">1-20: સિટી | 21-40: કોન | 41-60: નાઈટ<br>61-80: ટ્રાફિક | 81-100: રેઈન & ટાઈમ</div>
+    <div class="grid" id="lvlGrid"></div>
+    <button class="top" style="width:100%; padding:8px; background:#e53935;" onclick="closeLevels()">બંધ કરો ✖</button>
+  </div>
+</div>
+
 <script>
 const c = document.getElementById("c"), ctx = c.getContext("2d");
 let level = 1, score = 0, highScore = Number(localStorage.getItem("het_car_best")) || 0;
 let soundOn = true, audioCtx = null;
 let k = {u:0, d:0, l:0, r:0};
-let car = {x: 60, y: 350, w: 30, h: 52, a: 0, sx: 0, sy: 0};
-let park = {x: 220, y: 30, w: 50, h: 70}, obs = [];
+let car = {x: 60, y: 350, w: 30, h: 52, a: 0, sx: 0, sy: 0, col: "#00b0ff"};
+let park = {x: 220, y: 30, w: 50, h: 70}, obs = [], cones = [], rain = [];
 let levelStartTime = Date.now();
+let timeLeft = 45, isPaused = false;
 
 document.getElementById("highTxt").innerText = "Best: " + highScore;
 
@@ -68,6 +95,20 @@ bindBtn("btnL", "l");
 bindBtn("btnR", "r");
 bindBtn("btnU", "u");
 bindBtn("btnD", "d");
+
+// Keyboard support too
+window.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft" || e.key === "a") k.l = 1;
+  if (e.key === "ArrowRight" || e.key === "d") k.r = 1;
+  if (e.key === "ArrowUp" || e.key === "w") k.u = 1;
+  if (e.key === "ArrowDown" || e.key === "s") k.d = 1;
+});
+window.addEventListener("keyup", (e) => {
+  if (e.key === "ArrowLeft" || e.key === "a") k.l = 0;
+  if (e.key === "ArrowRight" || e.key === "d") k.r = 0;
+  if (e.key === "ArrowUp" || e.key === "w") k.u = 0;
+  if (e.key === "ArrowDown" || e.key === "s") k.d = 0;
+});
 
 function playSound(type) {
   if (!soundOn) return;
@@ -117,19 +158,113 @@ function updateScore(pts) {
   document.getElementById("highTxt").innerText = "Best: " + highScore;
 }
 
-function load(n) {
-  k = {u:0, d:0, l:0, r:0}; obs = [];
-  levelStartTime = Date.now();
-  let sx = (n % 3 === 1) ? 60 : (n % 3 === 2 ? 155 : 250);
-  car = {x: sx, y: 360, w: 30, h: 52, a: 0, sx: 0, sy: 0};
-  let px = (n % 2 === 1) ? 225 : 35;
-  park = {x: px, y: 30, w: 50, h: 72};
+// Unique random generator per level so no 2 levels are identical
+function seededRand(seed) {
+  let x = Math.sin(seed * 7919.13) * 10000;
+  return x - Math.floor(x);
+}
 
-  obs.push({x: px > 100 ? px - 45 : px + 62, y: 38, w: 30, h: 52, col: "#e53935", vx: 0});
-  obs.push({x: (n % 2 === 1) ? 20 : 140, y: 150, w: 140, h: 20, col: "#90a4ae", vx: 0});
-  if (n >= 2) obs.push({x: 40, y: 245, w: 50, h: 24, col: "#ff5722", vx: Math.min(4, 1.5 + n * 0.03)});
-  if (n >= 4) obs.push({x: 200, y: 195, w: 45, h: 20, col: "#ab47bc", vx: -Math.min(3.5, 1.2 + n * 0.025)});
-  if (n >= 6) obs.push({x: (n % 2 === 1) ? 110 : 150, y: 95, w: 40, h: 16, col: "#fbc02d", vx: 0});
+function getModeDetails(n) {
+  if (n <= 20) return { title: "🏙️ Mode 1: City Parking", bg: "#263238", bar: "#0d47a1", carCol: "#00b0ff" };
+  if (n <= 40) return { title: "🚧 Mode 2: Cone Challenge", bg: "#2e2e2e", bar: "#e65100", carCol: "#ffab00" };
+  if (n <= 60) return { title: "🌙 Mode 3: Night Headlight", bg: "#0a0e17", bar: "#311b92", carCol: "#ff5252" };
+  if (n <= 80) return { title: "🚔 Mode 4: Highway Traffic", bg: "#1b2e25", bar: "#00695c", carCol: "#00e676" };
+  return { title: "🌧️ Mode 5: Rain & Time Pro", bg: "#1a232e", bar: "#b71c1c", carCol: "#e040fb" };
+}
+
+function load(n) {
+  k = {u:0, d:0, l:0, r:0}; obs = []; cones = []; rain = [];
+  levelStartTime = Date.now();
+  const mode = getModeDetails(n);
+
+  // Update Mode UI
+  const modeBar = document.getElementById("modeBar");
+  modeBar.innerText = mode.title;
+  modeBar.style.background = mode.bar;
+  c.style.background = mode.bg;
+
+  const r1 = seededRand(n * 3 + 1);
+  const r2 = seededRand(n * 7 + 5);
+  const r3 = seededRand(n * 11 + 9);
+
+  // Varied Car Start Position (Left, Center, Right, or Mid-left/right)
+  let sx = 45 + Math.floor(r1 * 220);
+  car = {x: sx, y: 365, w: 30, h: 52, a: 0, sx: 0, sy: 0, col: mode.carCol};
+
+  // Varied Parking Position across the top/upper-middle area
+  let px = 25 + Math.floor(r2 * 210);
+  let py = 18 + Math.floor(r3 * 45);
+  park = {x: px, y: py, w: 50, h: 72};
+
+  // Parked guard cars beside parking slot (varies per level)
+  if (px > 75) {
+    obs.push({x: px - 42, y: py + 8, w: 30, h: 52, col: "#e53935", vx: 0});
+  }
+  if (px < 185) {
+    obs.push({x: px + 62, y: py + 8, w: 30, h: 52, col: "#8e24aa", vx: 0});
+  }
+
+  // Unique Wall Patterns (6 distinct shapes rotating & shifting per level)
+  const pattern = n % 6;
+  if (pattern === 1) {
+    let w1 = 110 + Math.floor(r1 * 50);
+    obs.push({x: 10, y: 230, w: w1, h: 18, col: "#90a4ae", vx: 0});
+    obs.push({x: 300 - w1, y: 145, w: w1, h: 18, col: "#90a4ae", vx: 0});
+  } else if (pattern === 2) {
+    let gap = 70 + Math.floor(r2 * 130);
+    obs.push({x: 10, y: 195, w: gap - 10, h: 18, col: "#78909c", vx: 0});
+    obs.push({x: gap + 65, y: 195, w: 300 - (gap + 65), h: 18, col: "#78909c", vx: 0});
+  } else if (pattern === 3) {
+    obs.push({x: 95 + Math.floor(r3 * 40), y: 155, w: 80, h: 90, col: "#607d8b", vx: 0});
+  } else if (pattern === 4) {
+      obs.push({x: 45, y: 140, w: 55, h: 110, col: "#78909c", vx: 0});
+    obs.push({x: 210, y: 140, w: 55, h: 110, col: "#78909c", vx: 0});
+  } else if (pattern === 5) {
+    obs.push({x: 10, y: 265, w: 180, h: 16, col: "#90a4ae", vx: 0});
+    obs.push({x: 120, y: 140, w: 180, h: 16, col: "#90a4ae", vx: 0});
+  } else {
+    obs.push({x: 65, y: 220, w: 180, h: 18, col: "#90a4ae", vx: 0});
+    obs.push({x: 145, y: 125, w: 20, h: 95, col: "#78909c", vx: 0});
+  }
+
+  // Mode 2+ (Level 21-100): Add Traffic Cones
+  if (n >= 21) {
+    let coneCount = 3 + (n % 5);
+    for (let i = 0; i < coneCount; i++) {
+      let cx = 35 + Math.floor(seededRand(n * 17 + i * 13) * 240);
+      let cy = 115 + Math.floor(seededRand(n * 23 + i * 19) * 195);
+      // Keep clear of start and parking
+      if (Math.hypot(cx - car.x, cy - car.y) > 65 && Math.hypot(cx - (park.x + 25), cy - (park.y + 36)) > 65) {
+        cones.push({x: cx, y: cy, r: 8});
+      }
+    }
+  }
+
+  // Moving Cars (Active from Level 2, heavier in Mode 4: Level 61-80)
+  if (n >= 2) {
+    let spd1 = Math.min(4.2, 1.4 + (n % 20) * 0.12);
+    obs.push({x: 30, y: 295, w: 48, h: 22, col: "#ff5722", vx: spd1});
+  }
+  if (n >= 61 || (n >= 10 && n % 2 === 0)) {
+    let spd2 = -Math.min(4.5, 1.6 + (n % 15) * 0.14);
+    obs.push({x: 210, y: 112, w: 46, h: 20, col: "#fbc02d", vx: spd2});
+  }
+  if (n >= 61) {
+    obs.push({x: 110, y: 205, w: 44, h: 20, col: "#29b6f6", vx: 2.3});
+  }
+
+  // Mode 5 (Level 81-100): Rain & Countdown Timer
+  const timerEl = document.getElementById("timerTxt");
+  if (n >= 81) {
+    timeLeft = Math.max(25, 45 - (n - 81));
+    timerEl.style.display = "inline";
+    timerEl.innerText = "⏱ " + timeLeft + "s";
+    for (let i = 0; i < 50; i++) {
+      rain.push({x: Math.random() * 310, y: Math.random() * 420, s: 5 + Math.random() * 4});
+    }
+  } else {
+    timerEl.style.display = "none";
+  }
 
   document.getElementById("lvl").innerText = "Level: " + n + " / 100";
 }
@@ -137,10 +272,45 @@ function load(n) {
 function nextLvl() { level = level < 100 ? level + 1 : 1; load(level); }
 load(1);
 
+// Level Picker Functions
+function openLevels() {
+  isPaused = true;
+  const grid = document.getElementById("lvlGrid");
+  grid.innerHTML = "";
+  for (let i = 1; i <= 100; i++) {
+    const b = document.createElement("button");
+    b.className = "g-btn" + (i === level ? " active" : "");
+    b.innerText = i;
+    b.onclick = () => { level = i; load(level); closeLevels(); };
+    grid.appendChild(b);
+  }
+  document.getElementById("lvlModal").style.display = "flex";
+}
+function closeLevels() {
+  document.getElementById("lvlModal").style.display = "none";
+  isPaused = false;
+  levelStartTime = Date.now();
+}
+
 let frameCount = 0;
 function loop() {
+  requestAnimationFrame(loop);
+  if (isPaused) return;
   frameCount++;
-  
+
+  // Mode 5 Timer check
+  if (level >= 81 && frameCount % 60 === 0) {
+    timeLeft--;
+    document.getElementById("timerTxt").innerText = "⏱ " + timeLeft + "s";
+    if (timeLeft <= 0) {
+      playSound("crash");
+      updateScore(-20);
+      alert("⏱️ સમય પૂરો થઈ ગયો! (-20 Score)");
+      load(level);
+      return;
+    }
+  }
+
   // ડાયરેક્ટ ઉપર-નીચે અને ડાબે-જમણે મૂવમેન્ટ
   if (k.u) { car.sy = -2.8; if (frameCount % 6 === 0) playSound("engine"); }
   else if (k.d) { car.sy = 2.4; if (frameCount % 6 === 0) playSound("engine"); }
@@ -158,15 +328,28 @@ function loop() {
     updateScore(-20);
     alert("💥 દીવાલ સાથે અથડાયા! (-20 Score)");
     load(level);
+    return;
   }
 
   for (let o of obs) {
-    if (o.vx) { o.x += o.vx; if (o.x < 10 || o.x + o.w > 300) o.vx *= -1; }
+    if (o.vx) { o.x += o.vx; if (o.x < 8 || o.x + o.w > 302) o.vx *= -1; }
     if (car.x + 12 > o.x && car.x - 12 < o.x + o.w && car.y + 22 > o.y && car.y - 22 < o.y + o.h) {
       playSound("crash");
       updateScore(-20);
       alert("💥 કાર અથડાઈ! (-20 Score)");
       load(level);
+      return;
+    }
+  }
+
+  // Cone collision
+  for (let cn of cones) {
+    if (Math.hypot(car.x - cn.x, car.y - cn.y) < cn.r + 14) {
+      playSound("crash");
+      updateScore(-20);
+      alert("🚧 ટ્રાફિક કોન સાથે અથડાયા! (-20 Score)");
+      load(level);
+      return;
     }
   }
 
@@ -178,21 +361,54 @@ function loop() {
     updateScore(bonus);
     alert("🎉 Level " + level + " જીત્યા! (+" + bonus + " Score)");
     nextLvl();
+    return;
   }
 
+  // Drawing
   ctx.clearRect(0, 0, 310, 420);
+
+  // Parking Box
   ctx.strokeStyle = "#ffeb3b"; ctx.lineWidth = 4; ctx.strokeRect(park.x, park.y, park.w, park.h);
   ctx.fillStyle = "#ffeb3b"; ctx.font = "bold 26px Arial"; ctx.fillText("P", park.x + 16, park.y + 45);
 
+  // Obstacles
   for (let o of obs) { ctx.fillStyle = o.col; ctx.fillRect(o.x, o.y, o.w, o.h); }
 
+  // Cones
+  for (let cn of cones) {
+    ctx.beginPath(); ctx.arc(cn.x, cn.y, cn.r, 0, Math.PI * 2); ctx.fillStyle = "#ff6d00"; ctx.fill();
+    ctx.beginPath(); ctx.arc(cn.x, cn.y, 3.5, 0, Math.PI * 2); ctx.fillStyle = "#fff"; ctx.fill();
+  }
+
+  // Player Car
   ctx.save(); ctx.translate(car.x, car.y); ctx.rotate(car.a);
-  ctx.fillStyle = "#00b0ff"; ctx.fillRect(-15, -26, 30, 52);
+  ctx.fillStyle = car.col; ctx.fillRect(-15, -26, 30, 52);
   ctx.fillStyle = "#fff"; ctx.fillRect(-3, -24, 6, 48);
   ctx.fillStyle = "#111"; ctx.fillRect(-11, -15, 22, 12);
+  // Headlights
+  ctx.fillStyle = "#ffff00"; ctx.fillRect(-12, -27, 6, 3); ctx.fillRect(6, -27, 6, 3);
   ctx.restore();
 
-  requestAnimationFrame(loop);
+  // Mode 3 (Level 41-60): Night Mode Darkness with Headlight Glow
+  if (level >= 41 && level <= 60) {
+    const grad = ctx.createRadialGradient(car.x, car.y - 25, 28, car.x, car.y - 25, 135);
+    grad.addColorStop(0, "rgba(0,0,0,0)");
+    grad.addColorStop(0.6, "rgba(0,0,0,0.72)");
+    grad.addColorStop(1, "rgba(0,0,0,0.95)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 310, 420);
+  }
+
+  // Mode 5 (Level 81-100): Rain Animation
+  if (level >= 81) {
+    ctx.strokeStyle = "rgba(179, 229, 252, 0.5)";
+    ctx.lineWidth = 1.5;
+    for (let r of rain) {
+      ctx.beginPath(); ctx.moveTo(r.x, r.y); ctx.lineTo(r.x - 2, r.y + 9); ctx.stroke();
+      r.y += r.s; r.x -= 1;
+      if (r.y > 420) { r.y = -10; r.x = Math.random() * 310; }
+    }
+  }
 }
 loop();
 </script>
