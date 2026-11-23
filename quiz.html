@@ -52,7 +52,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <div class="badge">🎓 Std 10 • GSEB & CBSE Board</div>
+        <div class="badge">🎓 Std 10 • GSEB & CBSE (1,640 MCQs)</div>
         <h1>સ્માર્ટ ચેપ્ટર-વાઇઝ MCQ ક્વિઝ</h1>
         <div class="sub-title">Smart Edu & Tech • Het Patel</div>
     </div>
@@ -69,7 +69,7 @@
             <select id="subject-select" onchange="updateChapters()"></select>
         </div>
         <div>
-            <label for="chapter-select">૩. પ્રકરણ પસંદ કરો (Select Chapter):</label>
+            <label for="chapter-select">૩. પ્રકરણ / યુનિટ પસંદ કરો (Select Chapter):</label>
             <select id="chapter-select"></select>
         </div>
         <button class="action-btn" onclick="startQuiz()">🚀 ક્વિઝ શરૂ કરો (Start Quiz)</button>
@@ -78,8 +78,8 @@
     <div id="quiz-area" style="display: none;">
         <div class="chapter-tag" id="active-chapter-title"></div>
         <div class="stats-bar">
-            <span id="question-counter">પ્રશ્ન 1 / 5</span>
-            <span id="score-counter">ગુણ: 0</span>
+            <span id="question-counter">પ્રશ્ન 1 / 10</span>
+            <span id="score-counter">ગુણ: 0 / 10</span>
         </div>
         <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
         <div class="question-box" id="question-text"></div>
@@ -100,152 +100,34 @@
     </div>
 </div>
 <div class="footer">Made with ❤️ by Het Patel | Smart Edu & Tech</div>
+
+<script src="gseb_ss.js"></script>
+<script src="gseb_sci.js"></script>
+<script src="gseb_maths.js"></script>
+<script src="gseb_eng.js"></script>
+<script src="gseb_guj.js"></script>
+<script src="cbse_ss.js"></script>
+<script src="cbse_sci.js"></script>
+<script src="cbse_maths.js"></script>
+<script src="cbse_eng.js"></script>
 <script>
-     const quizDatabase = {
+    const quizDatabase = {
         GSEB: {
-            "સામાજિક વિજ્ઞાન (Social Science)": {
-                "પ્રકરણ ૧: ભારતનો વારસો": [
-                    { q: "ભારતની પ્રજા અતિપ્રાચીન યુગથી પર્યાવરણ પ્રેમી રહી છે, તેની સાક્ષી શું છે?", options: ["વૃક્ષપ્રેમ અને પ્રાણીપ્રેમ", "મોટા મહેલો", "શસ્ત્રોનું નિર્માણ", "વિદેશી વેપાર"], ans: 0, exp: "ભારતીય સંસ્કૃતિમાં પીપળો, વડ, તુલસીની પૂજા અને પ્રાણીઓ પ્રત્યેનો પ્રેમ પર્યાવરણ પ્રેમ દર્શાવે છે." },
-                    { q: "'સત્યમેવ જયતે' સૂત્ર કયા ઉપનિષદમાંથી લેવામાં આવ્યું છે?", options: ["કઠોપનિષદ", "મુંડકોપનિષદ", "છાંદોગ્ય ઉપનિષદ", "પ્રશ્નોપનિષદ"], ans: 1, exp: "ભારતના રાષ્ટ્રીય ચિહ્ન નીચે લખાયેલ 'સત્યમેવ જયતે' મુંડકોપનિષદમાંથી લેવામાં આવ્યું છે." },
-                    { q: "ગુજરાતમાં વડનગર ખાતે કયો મહોત્સવ ઉજવવામાં આવે છે?", options: ["મોઢેરા નૃત્ય મહોત્સવ", "તાના-રીરી મહોત્સવ", "રણોત્સવ", "કાંકરિયા કાર્નિવલ"], ans: 1, exp: "વડનગર ખાતે સંગીત બેલડી તાના-રીરીની યાદમાં 'તાના-રીરી મહોત્સવ' ઉજવાય છે." },
-                    { q: "દ્રવિડ કુળની સૌથી જૂની ભાષા કઈ છે?", options: ["તેલુગુ", "કન્નડ", "તમિલ", "મલયાલમ"], ans: 2, exp: "દ્રવિડ કુળની ચાર ભાષાઓમાં 'તમિલ' સૌથી પ્રાચીન ભાષા છે." },
-                    { q: "વિશ્વ યોગ દિવસ ક્યારે ઉજવવામાં આવે છે?", options: ["૫ જૂન", "૨૧ જૂન", "૧૫ ઓગસ્ટ", "૨ ઓક્ટોબર"], ans: 1, exp: "સંયુક્ત રાષ્ટ્ર (UN) દ્વારા ૨૧ જૂનને 'વિશ્વ યોગ દિવસ' તરીકે જાહેર કરવામાં આવ્યો છે." }
-                ],
-                "પ્રકરણ ૮: કુદરતી સંસાધનો": [
-                    { q: "ભારતમાં 'કાળી જમીન' બીજા કયા નામે ઓળખાય છે?", options: ["રેગુર જમીન", "કાંપની જમીન", "પડખાઉ જમીન", "રાતી જમીન"], ans: 0, exp: "કાળી જમીન કપાસના પાક માટે વધુ અનુકૂળ હોવાથી તેને 'રેગુર' પણ કહે છે." },
-                    { q: "ભારતીય કૃષિ સંશોધન પરિષદ (ICAR) દ્વારા ભારતની જમીનને કેટલા પ્રકારમાં વહેંચવામાં આવી છે?", options: ["૬", "૮", "૧૦", "૪"], ans: 1, exp: "ICAR દ્વારા ભારતની જમીનને કુલ ૮ પ્રકારમાં વહેંચવામાં આવી છે." },
-                    { q: "પડખાઉ (લેટેરાઈટ) જમીનનું નામ લેટિન ભાષાના કયા શબ્દ પરથી પડ્યું છે?", options: ["Later (ઈંટ)", "Terra (માટી)", "Regur (કપાસ)", "Solum (જમીન)"], ans: 0, exp: "લેટિન શબ્દ 'Later' એટલે ઈંટ — આ જમીન ભીની થાય ત્યારે માખણ જેવી અને સુકાય ત્યારે ઈંટ જેવી સખત બને છે." },
-                    { q: "ભારતના કુલ ક્ષેત્રફળના લગભગ કેટલા ટકા ભાગમાં કાંપની જમીન આવેલી છે?", options: ["૧૫%", "૨૯%", "૪૩%", "૫૫%"], ans: 2, exp: "ભારતના કુલ ક્ષેત્રફળના લગભગ ૪૩% ભાગમાં કાંપની જમીન ફેલાયેલી છે." },
-                    { q: "કઈ જમીનમાં ભેજ સંગ્રહવાની શક્તિ ઘણી વધારે હોય છે?", options: ["રેતાળ જમીન", "કાળી જમીન", "પર્વતીય જમીન", "પડખાઉ જમીન"], ans: 1, exp: "કાળી જમીનમાં ભેજ સંગ્રહવાની ક્ષમતા સૌથી વધુ હોવાથી તે કપાસ માટે શ્રેષ્ઠ છે." }
-                ],
-                "પ્રકરણ ૧૫: આર્થિક વિકાસ": [
-                    { q: "વિશ્વ બેંકના અહેવાલ મુજબ કયા દેશો વિકસિત દેશો કહેવાય છે?", options: ["વધુ માથાદીઠ આવક ધરાવતા", "ઓછી વસ્તી ધરાવતા", "ખેતી પ્રધાન દેશો", "મોટો વિસ્તાર ધરાવતા"], ans: 0, exp: "વિશ્વ બેંકના માપદંડ મુજબ નિશ્ચિત મર્યાદા કરતાં વધુ માથાદીઠ આવક ધરાવતા દેશો વિકસિત ગણાય છે." },
-                    { q: "ભારતીય અર્થતંત્રને મુખ્યત્વે કેટલા વિભાગોમાં વહેંચવામાં આવે છે?", options: ["બે", "ત્રણ", "ચાર", "પાંચ"], ans: 1, exp: "પ્રાથમિક ક્ષેત્ર, માધ્યમિક ક્ષેત્ર અને સેવા ક્ષેત્ર — એમ કુલ ત્રણ વિભાગોમાં વહેંચાય છે." },
-                    { q: "પશુપાલન અને મત્સ્ય ઉદ્યોગનો સમાવેશ કયા ક્ષેત્રમાં થાય છે?", options: ["પ્રાથમિક ક્ષેત્ર", "માધ્યમિક ક્ષેત્ર", "સેવા ક્ષેત્ર", "ઔદ્યોગિક ક્ષેત્ર"], ans: 0, exp: "કૃષિ, પશુપાલન, મત્સ્ય ઉદ્યોગ અને ખાણકામ પ્રાથમિક ક્ષેત્રમાં આવે છે." },
-                    { q: "ભારતે કઈ આર્થિક પદ્ધતિ અપનાવી છે?", options: ["બજાર પદ્ધતિ", "સમાજવાદી પદ્ધતિ", "મિશ્ર અર્થતંત્ર", "સામ્યવાદી પદ્ધતિ"], ans: 2, exp: "ભારતમાં જાહેર અને ખાનગી બંને ક્ષેત્રોનું સહ-અસ્તિત્વ હોવાથી 'મિશ્ર અર્થતંત્ર' છે." },
-                    { q: "ઉત્પાદનનું કયું સાધન સજીવ છે?", options: ["જમીન", "મૂડી", "શ્રમ", "યંત્રો"], ans: 2, exp: "શ્રમ (માનવીનું શારીરિક કે માનસિક કાર્ય) એ ઉત્પાદનનું સજીવ સાધન છે." }
-                ]
-            },
-            "વિજ્ઞાન (Science)": {
-                "પ્રકરણ ૧: રાસાયણિક પ્રક્રિયાઓ અને સમીકરણો": [
-                    { q: "મેગ્નેશિયમની પટ્ટીને હવામાં સળગાવતા કયો સફેદ પાઉડર બને છે?", options: ["મેગ્નેશિયમ કાર્બોનેટ", "મેગ્નેશિયમ ઓક્સાઈડ", "મેગ્નેશિયમ સલ્ફેટ", "મેગ્નેશિયમ ક્લોરાઈડ"], ans: 1, exp: "મેગ્નેશિયમ હવામાંના ઓક્સિજન સાથે પ્રક્રિયા કરીને સફેદ મેગ્નેશિયમ ઓક્સાઈડ (MgO) બનાવે છે." },
-                    { q: "ચિપ્સનું ઓક્સિડેશન થતું અટકાવવા બેગમાં કયો વાયુ ભરે છે?", options: ["ઓક્સિજન", "નાઈટ્રોજન", "હાઈટ્રોજન", "કાર્બન ડાયોક્સાઈડ"], ans: 1, exp: "નાઈટ્રોજન નિષ્ક્રિય વાયુ હોવાથી ચિપ્સને ખોરી થતી અટકાવે છે." },
-                    { q: "કળીચૂનાનું રાસાયણિક સૂત્ર શું છે?", options: ["Ca(OH)₂", "CaCO₃", "CaO", "CaCl₂"], ans: 2, exp: "કેલ્શિયમ ઓક્સાઈડ (CaO) ને કળીચૂનો (Quick lime) કહેવામાં આવે છે." },
-                    { q: "શ્વસન એ કેવા પ્રકારની પ્રક્રિયા છે?", options: ["ઉષ્માશોષક", "ઉષ્માક્ષેપક", "વિઘટન", "વિસ્થાપન"], ans: 1, exp: "શ્વસન દરમિયાન શરીરમાં ઊર્જા (ઉષ્મા) ઉત્પન્ન થતી હોવાથી તે ઉષ્માક્ષેપક પ્રક્રિયા છે." },
-                    { q: "બ્લેક એન્ડ વ્હાઈટ ફોટોગ્રાફીમાં કયું સંયોજન વપરાય છે?", options: ["સિલ્વર બ્રોમાઈડ (AgBr)", "સોડિયમ ક્લોરાઈડ", "કોપર સલ્ફેટ", "ઝિંક ઓક્સાઈડ"], ans: 0, exp: "સૂર્યપ્રકાશની હાજરીમાં સિલ્વર બ્રોમાઈડનું વિઘટન થાય છે, જેનો ઉપયોગ ફોટોગ્રાફીમાં થાય છે." }
-                ],
-                "પ્રકરણ ૬: જૈવિક ક્રિયાઓ": [
-                    { q: "મનુષ્યમાં મૂત્રપિંડ (કિડની) કયા તંત્રનો ભાગ છે?", options: ["પોષણ", "શ્વસન", "ઉત્સર્જન", "પરિવહન"], ans: 2, exp: "મૂત્રપિંડ રુધિરમાંથી નકામા ઉત્સર્ગ દ્રવ્યો ગાળીને બહાર કાઢવાનું કાર્ય કરે છે." },
-                    { q: "વનસ્પતિમાં જલવાહક પેશી શેનું વહન કરે છે?", options: ["ખોરાકનું વહન", "પાણી અને ખનિજ ક્ષારોનું વહન", "એમિનો એસિડનું વહન", "ઓક્સિજનનું વહન"], ans: 1, exp: "જલવાહક (Xylem) મૂળ દ્વારા શોષાયેલા પાણી અને ખનિજ ક્ષારોનું વહન કરે છે." },
-                    { q: "સ્વયંપોષી પોષણ માટે શું જરૂરી છે?", options: ["કાર્બન ડાયોક્સાઈડ અને પાણી", "ક્લોરોફિલ", "સૂર્યપ્રકાશ", "આપેલ તમામ"], ans: 3, exp: "પ્રકાશસંશ્લેષણ માટે CO₂, પાણી, ક્લોરોફિલ અને સૂર્યપ્રકાશ ચારેય જરૂરી છે." },
-                    { q: "મનુષ્યના હૃદયમાં કેટલા ખંડો આવેલા છે?", options: ["૨", "૩", "૪", "૬"], ans: 2, exp: "મનુષ્યનું હૃદય બે કર્ણકો અને બે ક્ષેપકો એમ કુલ ૪ ખંડોનું બનેલું છે." },
-                    { q: "પાયરુવેટના વિઘટનથી કાર્બન ડાયોક્સાઈડ, પાણી અને ઊર્જા ક્યાં ઉત્પન્ન થાય છે?", options: ["કોષરસમાં", "કણાભસૂત્રમાં", "હરિતકણમાં", "કોષકેન્દ્રમાં"], ans: 1, exp: "જારક શ્વસનની આ પ્રક્રિયા કોષના કણાભસૂત્ર (Mitochondria) માં થાય છે." }
-                ],
-                "પ્રકરણ ૧૦: પ્રકાશ - પરાવર્તન અને વક્રીભવન": [
-                    { q: "વાહનોમાં પાછળનું દ્રશ્ય જોવા કયો અરીસો વપરાય છે?", options: ["અંતર્ગોળ અરીસો", "બહિર્ગોળ અરીસો", "સમતલ અરીસો", "દ્વિ-અંતર્ગોળ અરીસો"], ans: 1, exp: "બહિર્ગોળ અરીસો હંમેશા સીધું, નાનું અને વિશાળ દ્રષ્ટિક્ષેત્ર ધરાવતું પ્રતિબિંબ આપે છે." },
-                    { q: "લેન્સના પાવરનો SI એકમ કયો છે?", options: ["મીટર", "ડાયોપ્ટર (D)", "સેન્ટીમીટર", "વોટ"], ans: 1, exp: "લેન્સના પાવરનો SI એકમ ડાયોપ્ટર (D) છે." },
-                    { q: "દાંતના ડોક્ટર (Dentist) દર્દીના દાંતનું મોટું પ્રતિબિંબ જોવા કયો અરીસો વાપરે છે?", options: ["બહિર્ગોળ અરીસો", "અંતર્ગોળ અરીસો", "સમતલ અરીસો", "બહિર્ગોળ લેન્સ"], ans: 1, exp: "અંતર્ગોળ અરીસાની નજીક વસ્તુ રાખવાથી તેનું આભાસી, ચત્તું અને મોટું પ્રતિબિંબ મળે છે." },
-                    { q: "શૂન્યાવકાશમાં પ્રકાશનો વેગ કેટલો હોય છે?", options: ["3 × 10⁸ m/s", "3 × 10⁶ m/s", "3 × 10⁵ m/s", "3 × 10¹⁰ m/s"], ans: 0, exp: "શૂન્યાવકાશમાં પ્રકાશની ઝડપ 3 × 10⁸ મીટર/સેકન્ડ હોય છે." },
-                    { q: "ગોલીય અરીસાની વક્રતાત્રિજ્યા (R) અને કેન્દ્રલંબાઈ (f) વચ્ચે શું સંબંધ છે?", options: ["R = f", "R = 2f", "f = 2R", "R = 3f"], ans: 1, exp: "વક્રતાત્રિજ્યા હંમેશા કેન્દ્રલંબાઈ કરતાં બમણી (R = 2f) હોય છે." }
-                ]
-            },
-            "ગણિત (Maths)": {
-                "પ્રકરણ ૧: વાસ્તવિક સંખ્યાઓ": [
-                    { q: "ગુ.સા.અ. (12, 15, 21) ની કિંમત કેટલી થાય?", options: ["1", "3", "5", "7"], ans: 1, exp: "12 = 2²×3, 15 = 3×5, 21 = 3×7. ત્રણેયમાં સામાન્ય અવયવ 3 છે." },
-                    { q: "π (પાઈ) એ કેવી સંખ્યા છે?", options: ["સંમેય સંખ્યા", "અસંમેય સંખ્યા", "પૂર્ણાંક સંખ્યા", "પ્રાકૃતિક સંખ્યા"], ans: 1, exp: "π (પાઈ) એ અનંત અને અનાવૃત દશાંશ અભિવ્યક્તિ ધરાવતી અસંમેય સંખ્યા છે." },
-                    { q: "જો ગુ.સા.અ. (a, b) = 8 અને a × b = 64 હોય, તો લ.સા.અ. (a, b) કેટલો થાય?", options: ["4", "8", "16", "64"], ans: 1, exp: "લ.સા.અ. = (a × b) / ગુ.સા.અ. = 64 / 8 = 8." },
-                    { q: "સૌથી નાની અવિભાજ્ય સંખ્યા કઈ છે?", options: ["1", "2", "3", "4"], ans: 1, exp: "2 એ સૌથી નાની અને એકમાત્ર બેકી અવિભાજ્ય સંખ્યા છે." },
-                    { q: "3 + 2√5 એ કેવી સંખ્યા છે?", options: ["સંમેય", "અસંમેય", "પૂર્ણાંક", "પ્રાકૃતિક"], ans: 1, exp: "સંમેય અને અસંમેય સંખ્યાનો સરવાળો હંમેશા અસંમેય સંખ્યા જ મળે." }
-                ],
-                "પ્રકરણ ૨: બહુપદીઓ": [
-                    { q: "દ્વિઘાત બહુપદીને વધુમાં વધુ કેટલા શૂન્યો હોઈ શકે?", options: ["1", "2", "3", "0"], ans: 1, exp: "જેટલી બહુપદીની ઘાત હોય, તેટલા વધુમાં વધુ શૂન્યો હોઈ શકે (દ્વિઘાત = 2)." },
-                    { q: "બહુપદી p(x) = x² - 9 ના શૂન્યો કયા છે?", options: ["3, 3", "-3, -3", "3, -3", "9, -9"], ans: 2, exp: "x² - 9 = 0 ⇒ x² = 9 ⇒ x = +3 અથવા x = -3." },
-                    { q: "સુરેખ બહુપદી p(x) = ax + b નો આલેખ કેવો મળે?", options: ["પરવલય", "વર્તુળ", "રેખા", "ત્રિકોણ"], ans: 2, exp: "સુરેખ બહુપદીનો આલેખ હંમેશા એક સીધી રેખા મળે છે." },
-                    { q: "દ્વિઘાત બહુપદી ax² + bx + c ના શૂન્યોના સરવાળાનું સૂત્ર શું છે?", options: ["c/a", "-b/a", "b/a", "-c/a"], ans: 1, exp: "શૂન્યોનો સરવાળો (α + β) = -b/a અને ગુણાકાર (α·β) = c/a થાય." },
-                    { q: "બહુપદી p(x) = 3x³ + 5x² - 2x + 7 ની ઘાત કેટલી છે?", options: ["2", "3", "5", "7"], ans: 1, exp: "ચલ x નો મહત્તમ ઘાતાંક 3 હોવાથી બહુપદીની ઘાત 3 છે." }
-                ],
-                "પ્રકરણ ૧૫: સંભાવના": [
-                                    { q: "ચોક્કસ ઘટનાની સંભાવના કેટલી હોય છે?", options: ["0", "0.5", "1", "-1"], ans: 2, exp: "જે ઘટના ચોક્કસપણે બનવાની જ હોય તેની સંભાવના હંમેશા 1 હોય છે." },
-                    { q: "અશક્ય ઘટનાની સંભાવના કેટલી હોય છે?", options: ["0", "1", "0.5", "અનંત"], ans: 0, exp: "જે ઘટના બનવી અશક્ય હોય તેની સંભાવના 0 હોય છે." },
-                    { q: "એક સમતોલ સિક્કાને એકવાર ઉછાળતા 'છાપ' (H) મળવાની સંભાવના કેટલી?", options: ["1", "1/2", "1/4", "0"], ans: 1, exp: "કુલ પરિણામ 2 (H, T) માંથી છાપ 1 વાર આવે, તેથી સંભાવના = 1/2." },
-                    { q: "જો P(E) = 0.05 હોય, તો 'E નહીં' ની સંભાવના P(Ē) કેટલી થાય?", options: ["0.05", "0.95", "0.50", "1.05"], ans: 1, exp: "P(Ē) = 1 - P(E) = 1 - 0.05 = 0.95." },
-                    { q: "નીચેનામાંથી કયો વિકલ્પ કોઈ ઘટનાની સંભાવના ન હોઈ શકે?", options: ["2/3", "-1.5", "15%", "0.7"], ans: 1, exp: "કોઈપણ ઘટનાની સંભાવના ક્યારેય ઋણ (માઈનસ) હોઈ શકે નહીં." }
-                ]
-            }
+            "સામાજિક વિજ્ઞાન (Ch 1 to 23)": window.GSEB_SS || {},
+            "વિજ્ઞાન (Ch 1 to 13)": window.GSEB_SCI || {},
+            "ગણિત (Ch 1 to 14)": window.GSEB_MATHS || {},
+            "ઇંગ્લિશ (Unit 1-10 & Poem 1-4)": window.GSEB_ENG || {},
+            "ગુજરાતી (Ch 1 to 24)": window.GSEB_GUJ || {}
         },
-          CBSE: {
-            "Science (NCERT)": {
-                "Ch 1: Chemical Reactions & Equations": [
-                    { q: "Which gas is flushed in bags of potato chips to prevent oxidation?", options: ["Oxygen", "Nitrogen", "Hydrogen", "Carbon dioxide"], ans: 1, exp: "Nitrogen is an inert gas that prevents oils and fats in chips from getting oxidized." },
-                    { q: "What is the chemical formula of Quick Lime?", options: ["Ca(OH)₂", "CaCO₃", "CaO", "CaCl₂"], ans: 2, exp: "Calcium oxide (CaO) is commonly known as quick lime." },
-                    { q: "Respiration is which type of chemical reaction?", options: ["Endothermic", "Exothermic", "Decomposition", "Displacement"], ans: 1, exp: "Energy (heat) is released during respiration, making it an exothermic process." },
-                    { q: "Which compound is used in black and white photography?", options: ["Silver bromide (AgBr)", "Sodium chloride", "Copper sulphate", "Zinc oxide"], ans: 0, exp: "Silver bromide decomposes in sunlight and is used in black and white photography." },
-                    { q: "When magnesium ribbon burns in air, it forms a white powder of:", options: ["Magnesium carbonate", "Magnesium oxide", "Magnesium hydroxide", "Magnesium nitrate"], ans: 1, exp: "2Mg + O₂ → 2MgO (Magnesium oxide)." }
-                ],
-                "Ch 5: Life Processes": [
-                    { q: "The kidneys in human beings are a part of the system for:", options: ["Nutrition", "Respiration", "Excretion", "Transportation"], ans: 2, exp: "Kidneys filter nitrogenous waste products from blood and help in excretion." },
-                    { q: "The xylem in plants is responsible for:", options: ["Transport of water", "Transport of food", "Transport of amino acids", "Transport of oxygen"], ans: 0, exp: "Xylem transports water and minerals from roots to other parts of the plant." },
-                    { q: "Autotrophic mode of nutrition requires:", options: ["Carbon dioxide and water", "Chlorophyll", "Sunlight", "All of the above"], ans: 3, exp: "All four components are essential for photosynthesis." },
-                    { q: "How many chambers are present in a human heart?", options: ["2", "3", "4", "6"], ans: 2, exp: "The human heart has 4 chambers: two atria and two ventricles." },
-                    { q: "The breakdown of pyruvate to give CO₂, water and energy takes place in:", options: ["Cytoplasm", "Mitochondria", "Chloroplast", "Nucleus"], ans: 1, exp: "Aerobic respiration breaks down pyruvate inside the mitochondria." }
-                ],
-                "Ch 9: Light - Reflection & Refraction": [
-                    { q: "Which mirror is preferred as a rear-view mirror in vehicles?", options: ["Concave mirror", "Convex mirror", "Plane mirror", "Parabolic mirror"], ans: 1, exp: "A convex mirror always gives an erect, diminished image and has a wider field of view." },
-                    { q: "What is the SI unit of power of a lens?", options: ["Meter", "Dioptre (D)", "Centimeter", "Watt"], ans: 1, exp: "The SI unit of power of a lens is Dioptre (D)." },
-                    { q: "Which mirror is used by dentists to see large images of teeth?", options: ["Convex mirror", "Concave mirror", "Plane mirror", "Convex lens"], ans: 1, exp: "A concave mirror forms a virtual, erect, and magnified image when the object is close." },
-                    { q: "What is the speed of light in vacuum?", options: ["3 × 10⁸ m/s", "3 × 10⁶ m/s", "3 × 10⁵ m/s", "3 × 10¹⁰ m/s"], ans: 0, exp: "Light travels at a speed of 3 × 10⁸ m/s in vacuum." },
-                    { q: "What is the relation between radius of curvature (R) and focal length (f)?", options: ["R = f", "R = 2f", "f = 2R", "R = 3f"], ans: 1, exp: "The radius of curvature is twice the focal length (R = 2f)." }
-                ]
-            },
-            "Social Science (NCERT)": {
-                "History Ch 1: Nationalism in Europe": [
-                    { q: "Who prepared four prints visualising 'democratic and social Republics' in 1848?", options: ["Napoleon Bonaparte", "Frédéric Sorrieu", "Giuseppe Mazzini", "Otto von Bismarck"], ans: 1, exp: "In 1848, French artist Frédéric Sorrieu prepared four prints showing his utopian vision." },
-                    { q: "Who said: 'When France sneezes, the rest of Europe catches cold'?", options: ["Metternich", "Garibaldi", "Cavour", "Napoleon"], ans: 0, exp: "Austrian Chancellor Duke Metternich made this famous remark." },
-                    { q: "Which treaty recognized Greece as an independent nation in 1832?", options: ["Treaty of Vienna", "Treaty of Versailles", "Treaty of Constantinople", "Treaty of Paris"], ans: 2, exp: "The Treaty of Constantinople of 1832 recognized Greece as an independent nation." },
-                    { q: "Who was proclaimed German Emperor in January 1871?", options: ["Kaiser William I", "Otto von Bismarck", "Victor Emmanuel II", "Louis Philippe"], ans: 0, exp: "Prussian King William I was proclaimed German Emperor at Versailles in 1871." },
-                    { q: "What did the crown of oak leaves symbolize in Germania?", options: ["Peace", "Heroism", "Freedom", "Readiness to fight"], ans: 1, exp: "The German oak stands for heroism." }
-                ],
-                "Geography Ch 1: Resources & Development": [
-                    { q: "Black soil is also known by which of the following names?", options: ["Khadar", "Bangar", "Regur soil", "Laterite soil"], ans: 2, exp: "Black soil is ideal for growing cotton and is also known as Regur soil." },
-                    { q: "Which soil is most widely spread and important in India?", options: ["Alluvial soil", "Black soil", "Red soil", "Arid soil"], ans: 0, exp: "Alluvial soil covers the entire northern plains and is the most fertile." },
-                    { q: "Who wrote the book 'Small is Beautiful'?", options: ["Mahatma Gandhi", "Schumacher", "Brundtland", "Darwin"], ans: 1, exp: "Schumacher presented Gandhian philosophy in his book 'Small is Beautiful' (1974)." },
-                    { q: "In which state is terrace cultivation practised?", options: ["Punjab", "Haryana", "Uttarakhand", "Plains of UP"], ans: 2, exp: "Terrace farming is practised in hilly states like Uttarakhand to restrict soil erosion." },
-                    { q: "Where was the first International Earth Summit held in 1992?", options: ["New Delhi", "Rio de Janeiro", "Tokyo", "London"], ans: 1, exp: "It was held in Rio de Janeiro, Brazil in June 1992." }
-                ],
-                "Economics Ch 1: Development": [
-                    { q: "Which criterion is used by the World Bank to classify countries?", options: ["Literacy Rate", "Per Capita Income", "Life Expectancy", "Health Status"], ans: 1, exp: "World Bank uses Per Capita Income (Average Income) in its World Development Reports." },
-                    { q: "What is the full form of HDI?", options: ["Human Development Index", "Health Development Indicator", "Human Data Index", "High Development Index"], ans: 0, exp: "HDI stands for Human Development Index, published by UNDP." },
-                    { q: "Which state in India has the lowest Infant Mortality Rate (IMR)?", options: ["Bihar", "Kerala", "Haryana", "Punjab"], ans: 1, exp: "Kerala has a low Infant Mortality Rate because it has adequate basic health and educational facilities." },
-                    { q: "What is the full form of BMI?", options: ["Body Mass Index", "Basic Medical Index", "Body Measurement Indicator", "Blood Mass Index"], ans: 0, exp: "BMI stands for Body Mass Index, used to check if an adult is undernourished or overweight." },
-                    { q: "Which organization publishes the Human Development Report?", options: ["WTO", "IMF", "UNDP", "UNESCO"], ans: 2, exp: "United Nations Development Programme (UNDP) publishes the Human Development Report." }
-                ]
-            },
-            "Mathematics (NCERT)": {
-                "Ch 1: Real Numbers": [
-                    { q: "What is the HCF of 26 and 91?", options: ["7", "13", "26", "182"], ans: 1, exp: "26 = 2 × 13 and 91 = 7 × 13. Therefore, HCF(26, 91) = 13." },
-                    { q: "π (Pi) is an example of:", options: ["Rational number", "Irrational number", "Integer", "Whole number"], ans: 1, exp: "π has a non-terminating, non-repeating decimal expansion, so it is irrational." },
-                    { q: "If HCF(a, b) = 8 and a × b = 64, then LCM(a, b) is:", options: ["4", "8", "16", "64"], ans: 1, exp: "LCM = (a × b) / HCF = 64 / 8 = 8." },
-                    { q: "Which is the smallest prime number?", options: ["1", "2", "3", "4"], ans: 1, exp: "2 is the smallest and the only even prime number." },
-                    { q: "The product of a non-zero rational and an irrational number is always:", options: ["Rational", "Irrational", "One", "Zero"], ans: 1, exp: "Multiplying a non-zero rational number by an irrational number always gives an irrational number." }
-                ],
-                "Ch 2: Polynomials": [
-                    { q: "A quadratic polynomial can have at most how many zeroes?", options: ["1", "2", "3", "0"], ans: 1, exp: "The maximum number of zeroes of a polynomial equals its degree (Quadratic = 2)." },
-                    { q: "What are the zeroes of the polynomial x² - 9?", options: ["3, 3", "-3, -3", "3, -3", "9, -9"], ans: 2, exp: "x² - 9 = 0 ⇒ x² = 9 ⇒ x = +3 or -3." },
-                    { q: "The graph of a linear polynomial ax + b is always a:", options: ["Parabola", "Circle", "Straight line", "Triangle"], ans: 2, exp: "A linear polynomial always represents a straight line on a graph." },
-                    { q: "What is the sum of zeroes of quadratic polynomial ax² + bx + c?", options: ["c/a", "-b/a", "b/a", "-c/a"], ans: 1, exp: "Sum of zeroes (α + β) = -b/a." },
-                               { q: "What is the degree of the polynomial 3x³ + 5x² - 2x + 7?", options: ["2", "3", "5", "7"], ans: 1, exp: "The highest power of the variable x is 3." }
-                ],
-                "Ch 14: Probability": [
-                    { q: "What is the probability of a sure (certain) event?", options: ["0", "0.5", "1", "-1"], ans: 2, exp: "An event that is certain to happen has a probability of 1." },
-                    { q: "What is the probability of an impossible event?", options: ["0", "1", "0.5", "Infinity"], ans: 0, exp: "An event that cannot happen has a probability of 0." },
-                    { q: "A fair coin is tossed once. What is the probability of getting a head?", options: ["1", "1/2", "1/4", "0"], ans: 1, exp: "Total outcomes = 2 (H, T). Favourable outcome = 1. Probability = 1/2." },
-                    { q: "If P(E) = 0.05, what is the probability of 'not E'?", options: ["0.05", "0.95", "0.50", "1.05"], ans: 1, exp: "P(not E) = 1 - P(E) = 1 - 0.05 = 0.95." },
-                    { q: "Which of the following cannot be the probability of an event?", options: ["2/3", "-1.5", "15%", "0.7"], ans: 1, exp: "Probability of an event can never be negative (less than 0)." }
-                ]
-            }
+        CBSE: {
+            "Social Science (Ch 1 to 21)": window.CBSE_SS || {},
+            "Science (Ch 1 to 13)": window.CBSE_SCI || {},
+            "Mathematics (Ch 1 to 14)": window.CBSE_MATHS || {},
+            "English (Ch 1-18 & Poem 1-10)": window.CBSE_ENG || {}
         }
     };
-      let currentBoard = "GSEB";
+
+    let currentBoard = "GSEB";
     let currentQuestions = [];
     let currentQIndex = 0;
     let score = 0;
@@ -274,7 +156,7 @@
 
     function updateChapters() {
         const selectedSub = subjectSelect.value;
-        const chapters = Object.keys(quizDatabase[currentBoard][selectedSub]);
+        const chapters = Object.keys(quizDatabase[currentBoard][selectedSub] || {});
         chapterSelect.innerHTML = "";
         chapters.forEach(chap => {
             const opt = document.createElement("option");
@@ -287,7 +169,11 @@
     function startQuiz() {
         const sub = subjectSelect.value;
         const chap = chapterSelect.value;
-        currentQuestions = quizDatabase[currentBoard][sub][chap];
+        currentQuestions = (quizDatabase[currentBoard][sub] && quizDatabase[currentBoard][sub][chap]) ? quizDatabase[currentBoard][sub][chap] : [];
+        if (!currentQuestions.length) {
+            alert("આ પ્રકરણના પ્રશ્નો લોડ થઈ રહ્યા છે, કૃપા કરીને થોડી સેકન્ડ પછી ફરી પ્રયાસ કરો.");
+            return;
+        }
         currentQIndex = 0;
         score = 0;
 
