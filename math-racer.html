@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Math Speed Racer | Het Patel</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif; user-select: none; }
+        body { background: #090d16; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+        .top-bar { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #1e293b; border-bottom: 2px solid #38bdf8; }
+        .btn-back { color: #38bdf8; text-decoration: none; font-size: 0.9rem; font-weight: 700; }
+        .stats { display: flex; gap: 15px; font-size: 0.95rem; font-weight: 700; }
+        .question-box { width: 100%; max-width: 420px; background: linear-gradient(135deg, #1e1b4b, #312e81); padding: 14px; text-align: center; border-bottom: 2px solid #818cf8; }
+        .q-label { font-size: 0.8rem; color: #a5b4fc; margin-bottom: 2px; }
+        .q-text { font-size: 1.7rem; font-weight: 800; color: #fde047; letter-spacing: 1px; }
+        #gameArea { position: relative; width: 100%; max-width: 420px; height: 62vh; background: #1e293b; overflow: hidden; border-left: 4px solid #facc15; border-right: 4px solid #facc15; }
+        .lane-line { position: absolute; top: 0; bottom: 0; width: 3px; background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.4) 0px, rgba(255,255,255,0.4) 25px, transparent 25px, transparent 50px); }
+        #car { position: absolute; bottom: 20px; width: 26%; left: 37%; text-align: center; font-size: 2.8rem; transition: left 0.15s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); }
+        .gate { position: absolute; top: -60px; width: 30%; padding: 10px 5px; background: #0f172a; border: 2px solid #38bdf8; border-radius: 12px; text-align: center; font-size: 1.3rem; font-weight: 800; color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.4); }
+        .controls { width: 100%; max-width: 420px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 10px; background: #0f172a; }
+        .ctrl-btn { padding: 14px; background: #1e293b; border: 2px solid #38bdf8; color: white; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        .ctrl-btn:active { background: #38bdf8; color: #0f172a; }
+        #overlay { position: absolute; inset: 0; background: rgba(9, 13, 22, 0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; z-index: 10; }
+        .start-btn { margin-top: 15px; padding: 12px 30px; background: linear-gradient(135deg, #facc15, #eab308); color: #0f172a; border: none; border-radius: 25px; font-size: 1.1rem; font-weight: 800; cursor: pointer; }
+    </style>
+    <script data-goatcounter="https://goatcounter.com" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="btn-back">🏠 Home</a>
+        <div class="stats">
+            <span>🏆 <span id="score">0</span></span>
+            <span>❤️ <span id="lives">3</span></span>
+        </div>
+    </div>
+    <div class="question-box">
+        <div class="q-label">સાચા જવાબ વાળી લેનમાં ગાડી ચલાવો!</div>
+        <div class="q-text" id="question">5 + 7 = ?</div>
+    </div>
+    <div id="gameArea">
+        <div class="lane-line" style="left: 33.3%;"></div>
+        <div class="lane-line" style="left: 66.6%;"></div>
+        <div id="car">🏎️</div>
+        <div id="overlay">
+            <h2 style="color:#facc15; font-size:1.6rem;">🏎️ Math Speed Racer</h2>
+            <p style="color:#cbd5e1; margin-top:8px; font-size:0.95rem;">ઉપર આપેલા ગણિતના દાખલાનો સાચો જવાબ શોધીને તે લેનમાં ગાડી ચલાવો!</p>
+            <p id="finalScore" style="color:#34d399; font-weight:700; margin-top:10px; display:none;"></p>
+            <button class="start-btn" onclick="startGame()">▶️ ગેમ શરૂ કરો</button>
+        </div>
+    </div>
+    <div class="controls">
+        <button class="ctrl-btn" onclick="setLane(0)">⬅️ ડાબે</button>
+        <button class="ctrl-btn" onclick="setLane(1)">⬆️ વચ્ચે</button>
+        <button class="ctrl-btn" onclick="setLane(2)">જમણે ➡️</button>
+    </div>
+
+<script>
+    let lane = 1, score = 0, lives = 3, speed = 3.2, running = false, currentAns = 0, gates = [], animId;
+    const laneLefts = ['3.5%', '37%', '70.5%'];
+    const gateLefts = ['1.6%', '35%', '68.3%'];
+
+    function setLane(l) {
+        lane = l;
+        document.getElementById('car').style.left = laneLefts[lane];
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft' && lane > 0) setLane(lane - 1);
+        if (e.key === 'ArrowRight' && lane < 2) setLane(lane + 1);
+    });
+
+    function generateQuestion() {
+        const ops = ['+', '-', '×'];
+        const op = ops[Math.floor(Math.random() * ops.length)];
+        let a = Math.floor(Math.random() * 12) + 2;
+        let b = Math.floor(Math.random() * 10) + 1;
+        if (op === '-' && a < b) [a, b] = [b, a];
+        currentAns = op === '+' ? a + b : (op === '-' ? a - b : a * b);
+        document.getElementById('question').innerText = `${a} ${op} ${b} = ?`;
+
+        let options = new Set([currentAns]);
+        while (options.size < 3) {
+            let fake = currentAns + (Math.floor(Math.random() * 9) - 4);
+            if (fake >= 0 && fake !== currentAns) options.add(fake);
+        }
+        return Array.from(options).sort(() => Math.random() - 0.5);
+    }
+
+    function spawnRow() {
+        const area = document.getElementById('gameArea');
+        gates.forEach(g => g.el.remove());
+        gates = [];
+        const opts = generateQuestion();
+        opts.forEach((val, idx) => {
+            const div = document.createElement('div');
+            div.className = 'gate';
+            div.style.left = gateLefts[idx];
+            div.innerText = val;
+            area.appendChild(div);
+            gates.push({ el: div, val: val, lane: idx, y: -60 });
+        });
+    }
+
+    function startGame() {
+        score = 0; lives = 3; speed = 3.2; running = true;
+        document.getElementById('score').innerText = score;
+        document.getElementById('lives').innerText = lives;
+        document.getElementById('overlay').style.display = 'none';
+        setLane(1);
+        spawnRow();
+        loop();
+    }
+
+    function loop() {
+        if (!running) return;
+        const areaH = document.getElementById('gameArea').offsetHeight;
+        let hit = false;
+
+        gates.forEach(g => {
+            g.y += speed;
+            g.el.style.top = g.y + 'px';
+            if (!hit && g.y + 45 >= areaH - 75 && g.y <= areaH - 20 && g.lane === lane) {
+                hit = true;
+                if (g.val === currentAns) {
+                    score += 10;
+                    speed = Math.min(7.5, speed + 0.25);
+                    document.getElementById('score').innerText = score;
+                } else {
+                    lives--;
+                    document.getElementById('lives').innerText = lives;
+                }
+            }
+        });
+
+        if (hit || (gates.length && gates[0].y > areaH)) {
+            if (!hit) { lives--; document.getElementById('lives').innerText = lives; }
+            if (lives <= 0) {
+                running = false;
+                document.getElementById('finalScore').style.display = 'block';
+                document.getElementById('finalScore').innerText = `તમારો ફાઇનલ સ્કોર: ${score} 🏆`;
+                document.getElementById('overlay').style.display = 'flex';
+                return;
+            }
+            spawnRow();
+        }
+        animId = requestAnimationFrame(loop);
+    }
+</script>
+</body>
+</html>
