@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Space Shooter Pro | Het Patel</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif; user-select: none; }
+        body { background: #050811; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+        .top-bar { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #111827; border-bottom: 2px solid #e879f9; }
+        .btn-back { color: #e879f9; text-decoration: none; font-size: 0.9rem; font-weight: 700; }
+        .stats { display: flex; gap: 15px; font-size: 0.95rem; font-weight: 700; }
+        #spaceArea { position: relative; width: 100%; max-width: 420px; height: 70vh; background: radial-gradient(circle at center, #1e1b4b 0%, #050811 100%); overflow: hidden; border-left: 2px solid #6366f1; border-right: 2px solid #6366f1; touch-action: none; }
+        #ship { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); font-size: 2.6rem; filter: drop-shadow(0 0 10px #38bdf8); }
+        .bullet { position: absolute; width: 5px; height: 16px; background: #38bdf8; border-radius: 4px; box-shadow: 0 0 8px #38bdf8; }
+        .enemy { position: absolute; font-size: 2.1rem; }
+        .controls { width: 100%; max-width: 420px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; background: #0f172a; }
+        .ctrl-btn { padding: 14px; background: #1e293b; border: 2px solid #e879f9; color: white; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        .ctrl-btn:active { background: #e879f9; color: #0f172a; }
+        #overlay { position: absolute; inset: 0; background: rgba(5, 8, 17, 0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; z-index: 10; }
+        .start-btn { margin-top: 15px; padding: 12px 30px; background: linear-gradient(135deg, #e879f9, #8b5cf6); color: white; border: none; border-radius: 25px; font-size: 1.1rem; font-weight: 800; cursor: pointer; }
+    </style>
+    <script data-goatcounter="https://goatcounter.com" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="btn-back">🏠 Home</a>
+        <div class="stats">
+            <span>🚀 <span id="score">0</span></span>
+            <span>❤️ <span id="lives">3</span></span>
+        </div>
+    </div>
+    <div id="spaceArea">
+        <div id="ship">🚀</div>
+        <div id="overlay">
+            <h2 style="color:#e879f9; font-size:1.6rem;">🚀 Space Shooter Pro</h2>
+            <p style="color:#cbd5e1; margin-top:8px; font-size:0.95rem;">સ્ક્રીન પર આંગળી ફેરવીને અથવા બટન વડે દુશ્મન UFO ને તોડો!</p>
+            <p id="finalScore" style="color:#34d399; font-weight:700; margin-top:10px; display:none;"></p>
+            <button class="start-btn" onclick="startGame()">▶️ મિશન શરૂ કરો</button>
+        </div>
+    </div>
+    <div class="controls">
+        <button class="ctrl-btn" onclick="moveShip(-35)">⬅️ ડાબે</button>
+        <button class="ctrl-btn" onclick="moveShip(35)">જમણે ➡️</button>
+    </div>
+
+<script>
+    const area = document.getElementById('spaceArea');
+    const ship = document.getElementById('ship');
+    let shipX = 180, score = 0, lives = 3, running = false, bullets = [], enemies = [], frame = 0;
+
+    function moveShip(dx) {
+        shipX = Math.max(25, Math.min(area.offsetWidth - 25, shipX + dx));
+        ship.style.left = shipX + 'px';
+    }
+
+    area.addEventListener('touchmove', e => {
+        if (!running) return;
+        const rect = area.getBoundingClientRect();
+        shipX = Math.max(25, Math.min(area.offsetWidth - 25, e.touches.clientX - rect.left));
+        ship.style.left = shipX + 'px';
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft') moveShip(-30);
+        if (e.key === 'ArrowRight') moveShip(30);
+    });
+
+    function startGame() {
+        bullets.forEach(b => b.el.remove());
+        enemies.forEach(en => en.el.remove());
+        bullets = []; enemies = [];
+        score = 0; lives = 3; frame = 0; running = true;
+        shipX = area.offsetWidth / 2;
+        ship.style.left = shipX + 'px';
+        document.getElementById('score').innerText = score;
+        document.getElementById('lives').innerText = lives;
+        document.getElementById('overlay').style.display = 'none';
+        loop();
+    }
+
+    function loop() {
+        if (!running) return;
+        frame++;
+
+        if (frame % 18 === 0) {
+            const b = document.createElement('div');
+            b.className = 'bullet';
+            b.style.left = (shipX - 2.5) + 'px';
+            b.style.bottom = '65px';
+            area.appendChild(b);
+            bullets.push({ el: b, x: shipX, y: 65 });
+        }
+
+        if (frame % Math.max(28, 60 - Math.floor(score / 15)) === 0) {
+            const en = document.createElement('div');
+            en.className = 'enemy';
+            en.innerText = Math.random() > 0.4 ? '🛸' : '☄️';
+            const ex = Math.random() * (area.offsetWidth - 50) + 10;
+            en.style.left = ex + 'px';
+            en.style.top = '-40px';
+            area.appendChild(en);
+            enemies.push({ el: en, x: ex, y: -40, spd: 2.3 + Math.min(3.5, score / 80) });
+        }
+
+        bullets.forEach((b, bi) => {
+            b.y += 8;
+            b.el.style.bottom = b.y + 'px';
+            if (b.y > area.offsetHeight) { b.el.remove(); bullets.splice(bi, 1); }
+        });
+
+        enemies.forEach((en, ei) => {
+            en.y += en.spd;
+            en.el.style.top = en.y + 'px';
+
+            bullets.forEach((b, bi) => {
+                const bTop = area.offsetHeight - b.y;
+                if (Math.abs(b.x - (en.x + 18)) < 26 && Math.abs(bTop - (en.y + 18)) < 26) {
+                    en.el.remove(); enemies.splice(ei, 1);
+                    b.el.remove(); bullets.splice(bi, 1);
+                    score += 10;
+                    document.getElementById('score').innerText = score;
+                }
+            });
+
+            if (en.y > area.offsetHeight - 40) {
+                en.el.remove(); enemies.splice(ei, 1);
+                lives--;
+                document.getElementById('lives').innerText = lives;
+                if (lives <= 0) {
+                    running = false;
+                    document.getElementById('finalScore').style.display = 'block';
+                    document.getElementById('finalScore').innerText = `મિશન સ્કોર: ${score} 🚀`;
+                    document.getElementById('overlay').style.display = 'flex';
+                }
+            }
+        });
+
+        requestAnimationFrame(loop);
+    }
+</script>
+</body>
+</html>
