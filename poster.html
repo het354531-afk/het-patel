@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7-Card Poster - Het Patel</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif; }
+        body { background: #090d16; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        .poster {
+            width: 540px;
+            background: radial-gradient(circle at top, #172038 0%, #0b0f19 100%);
+            border: 2px solid #2a3655;
+            border-radius: 24px;
+            padding: 24px 20px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+        }
+        .top-bar { display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 0.85rem; letter-spacing: 1.5px; color: #e2e8f0; font-weight: 700; margin-bottom: 12px; }
+        .pill { background: linear-gradient(135deg, #facc15, #eab308); color: #0f172a; padding: 4px 16px; border-radius: 20px; font-weight: 800; letter-spacing: 0.5px; }
+        .headline { font-size: 1.05rem; line-height: 1.45; font-weight: 700; margin-bottom: 22px; color: #f8fafc; }
+        .hl-cyan { color: #38bdf8; }
+        .hl-yellow { color: #facc15; }
+        .hl-green { color: #34d399; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 14px; margin-bottom: 18px; }
+        .card {
+            position: relative;
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 16px;
+            padding: 22px 10px 14px;
+            margin-top: 8px;
+        }
+        .icon-box {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+        }
+        .card h3 { font-size: 0.86rem; margin-bottom: 4px; font-weight: 700; }
+        .card p { font-size: 0.8rem; color: #e2e8f0; line-height: 1.3; font-weight: 600; }
+
+        /* Neon Card Borders */
+        .c-blue { border: 2px solid #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.25); }
+        .c-blue .icon-box { border: 2px solid #38bdf8; }
+        .c-blue h3 { color: #38bdf8; }
+
+        .c-yellow { border: 2px solid #facc15; box-shadow: 0 0 12px rgba(250, 204, 21, 0.25); }
+        .c-yellow .icon-box { border: 2px solid #facc15; }
+        .c-yellow h3 { color: #facc15; }
+
+        .c-red { border: 2px solid #f87171; box-shadow: 0 0 12px rgba(248, 113, 113, 0.25); }
+        .c-red .icon-box { border: 2px solid #f87171; }
+        .c-red h3 { color: #f87171; }
+
+        .c-indigo { border: 2px solid #60a5fa; box-shadow: 0 0 12px rgba(96, 165, 250, 0.25); }
+        .c-indigo .icon-box { border: 2px solid #60a5fa; }
+        .c-indigo h3 { color: #60a5fa; }
+
+        .c-pink { border: 2px solid #e879f9; box-shadow: 0 0 12px rgba(232, 121, 249, 0.25); }
+        .c-pink .icon-box { border: 2px solid #e879f9; }
+        .c-pink h3 { color: #e879f9; }
+
+        .c-green { border: 2px solid #34d399; box-shadow: 0 0 12px rgba(52, 211, 153, 0.25); }
+        .c-green .icon-box { border: 2px solid #34d399; }
+        .c-green h3 { color: #34d399; }
+
+        /* 7th Full Width Card */
+        .c-orange {
+            grid-column: span 2;
+            border: 2px solid #fb923c;
+            box-shadow: 0 0 14px rgba(251, 146, 60, 0.3);
+            padding: 22px 14px 14px;
+        }
+        .c-orange .icon-box { border: 2px solid #fb923c; }
+        .c-orange h3 { color: #fb923c; font-size: 0.92rem; }
+
+        .cta-btn {
+            display: inline-block;
+            border: 2px solid #facc15;
+            color: #fde047;
+            background: rgba(250, 204, 21, 0.1);
+            padding: 8px 26px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.25);
+        }
+        .school-tag { font-size: 0.78rem; color: #94a3b8; font-weight: 600; }
+    </style>
+</head>
+<body>
+<div class="poster">
+    <div class="top-bar">
+        <span>SMART EDU •</span>
+        <span class="pill">Het Patel</span>
+        <span>• AI • GAMING</span>
+    </div>
+    <div class="headline">
+        <span class="hl-cyan">het AI</span>, ૧૦૦ લેવલની <span class="hl-yellow">Car Parking</span> ગેમ, <span class="hl-green">ધો.૧૦ સ્માર્ટ ક્વિઝ & રિવિઝન હબ</span> અને અમારી YouTube, Facebook & Instagram ચેનલની મુલાકાત લો!
+    </div>
+
+    <div class="grid">
+        <div class="card c-blue">
+            <div class="icon-box">🤖</div>
+            <h3>het AI - Smart Assistant</h3>
+            <p>ગુજરાતીમાં વાત કરતું સ્માર્ટ AI</p>
+        </div>
+
+        <div class="card c-yellow">
+            <div class="icon-box">🚖</div>
+            <h3>Car Parking 100 - Pro</h3>
+            <p>૧૦૦ લેવલ + ૫ નવા ગેમ મોડ્સ</p>
+        </div>
+
+        <div class="card c-red">
+            <div class="icon-box">▶️</div>
+            <h3>Minesh Patel | Smart Edu & Tech</h3>
+            <p>@MineshPatelTech - YouTube</p>
+        </div>
+
+        <div class="card c-indigo">
+            <div class="icon-box">📘</div>
+            <h3>Het Patel - Smart Edu & Tech</h3>
+            <p>ઓફિશિયલ Facebook પેજ</p>
+        </div>
+
+        <div class="card c-pink">
+            <div class="icon-box">📸</div>
+            <h3>Het Patel | Instagram</h3>
+            <p>@het0.2674 - Reels & Tech</p>
+        </div>
+
+        <div class="card c-green">
+            <div class="icon-box">🎓</div>
+            <h3>Std 10 Smart Quiz</h3>
+            <p>GSEB & CBSE 1,640+ MCQs</p>
+        </div>
+
+        <div class="card c-orange">
+            <div class="icon-box">📚</div>
+            <h3>Std 10 Smart Revision Hub (NEW ✨)</h3>
+            <p>GSEB & CBSE બધા ૬ વિષયોના શોર્ટ સૂત્રો, વ્યાકરણ ટ્રિક્સ & IMP</p>
+        </div>
+    </div>
+
+    <div class="cta-btn">VISIT WEBSITE & PLAY NOW</div>
+    <div class="school-tag">પ્રા.શાળા કુંભારી તલાવડી, બોરસદ</div>
+</div>
+</body>
+</html>
