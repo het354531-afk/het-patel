@@ -69,7 +69,18 @@
         if (e.key === 'ArrowLeft' && lane > 0) setLane(lane - 1);
         if (e.key === 'ArrowRight' && lane < 2) setLane(lane + 1);
     });
-
+    const gameArea = document.getElementById('gameArea');
+    gameArea.addEventListener('touchmove', e => {
+        if (!running) return;
+        e.preventDefault();
+        const rect = gameArea.getBoundingClientRect();
+        const x = e.touches.item(0).clientX - rect.left;
+        const w = gameArea.offsetWidth;
+        if (x < w / 3) setLane(0);
+        else if (x < (2 * w) / 3) setLane(1);
+        else setLane(2);
+    }, { passive: false });
+                              
     function generateQuestion() {
         const ops = ['+', '-', '×'];
         const op = ops[Math.floor(Math.random() * ops.length)];
