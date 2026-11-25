@@ -55,12 +55,15 @@
         ship.style.left = shipX + 'px';
     }
 
-    area.addEventListener('touchmove', e => {
+        area.addEventListener('touchmove', e => {
         if (!running) return;
+        e.preventDefault();
         const rect = area.getBoundingClientRect();
-        shipX = Math.max(25, Math.min(area.offsetWidth - 25, e.touches.clientX - rect.left));
+        const touch = e.touches[0];
+        shipX = Math.max(25, Math.min(area.offsetWidth - 25, touch.clientX - rect.left));
         ship.style.left = shipX + 'px';
-    });
+    }, { passive: false });
+    
 
     document.addEventListener('keydown', e => {
         if (e.key === 'ArrowLeft') moveShip(-30);
