@@ -63,7 +63,17 @@
         if (e.key === 'ArrowLeft' && lane > 0) setLane(lane - 1);
         if (e.key === 'ArrowRight' && lane < 2) setLane(lane + 1);
     });
-
+    road.addEventListener('touchmove', e => {
+        if (!running) return;
+        e.preventDefault();
+        const rect = road.getBoundingClientRect();
+        const x = e.touches[0].clientX - rect.left;
+        const w = road.offsetWidth;
+        if (x < w / 3) setLane(0);
+        else if (x < (2 * w) / 3) setLane(1);
+        else setLane(2);
+    }, { passive: false });
+    
     function startGame() {
         items.forEach(it => it.el.remove());
         items = [];
