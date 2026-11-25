@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Std 10 All-in-One Smart Revision Hub | Het Patel</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+            --accent: #f472b6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif; }
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: var(--text-main); min-height: 100vh; padding: 20px; }
+        .container { max-width: 950px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 22px; }
+        .badge { display: inline-block; background: rgba(56, 189, 248, 0.15); color: var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; border: 1px solid rgba(56, 189, 248, 0.3); }
+        h1 { font-size: 1.85rem; background: linear-gradient(to right, #38bdf8, #818cf8, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
+        .subtitle { color: var(--text-muted); font-size: 0.92rem; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+        .btn-home { text-decoration: none; color: var(--text-main); background: rgba(255, 255, 255, 0.08); padding: 8px 16px; border-radius: 10px; font-size: 0.9rem; border: 1px solid var(--border); transition: 0.3s; }
+        .btn-home:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--primary); }
+        .controls { background: var(--card-bg); padding: 18px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .board-group { display: flex; gap: 10px; margin-bottom: 14px; }
+        .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px; }
+        .tab-btn { padding: 10px 12px; border: 1px solid var(--border); background: rgba(15, 23, 42, 0.65); color: var(--text-muted); border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.25s ease; text-align: center; }
+        .board-group .tab-btn { flex: 1; }
+        .tab-btn:hover { border-color: rgba(56, 189, 248, 0.4); color: white; }
+        .tab-btn.active { background: linear-gradient(135deg, #0284c7, #4f46e5); color: white; border-color: transparent; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
+        .search-box { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: #0f172a; color: white; font-size: 0.95rem; outline: none; }
+        .search-box:focus { border-color: var(--primary); }
+        .revision-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        .rev-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+        .card-title { font-size: 1.12rem; font-weight: 700; color: var(--primary); }
+        .tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 8px; background: rgba(129, 140, 248, 0.2); color: #c7d2fe; font-weight: 600; }
+        .card-content ul { list-style-type: none; padding-left: 0; }
+        .card-content li { margin-bottom: 10px; line-height: 1.65; font-size: 0.95rem; padding-left: 20px; position: relative; }
+        .card-content li::before { content: "✦"; position: absolute; left: 0; color: var(--accent); }
+        .highlight { color: #fde047; font-weight: 600; }
+        .formula { background: rgba(15, 23, 42, 0.8); padding: 2px 8px; border-radius: 6px; font-family: monospace; color: #38bdf8; font-size: 0.95rem; }
+        .trick-box { background: rgba(16, 185, 129, 0.12); border-left: 4px solid #10b981; padding: 10px 14px; border-radius: 8px; margin-top: 10px; font-size: 0.9rem; color: #a7f3d0; }
+        footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem; }
+    </style>
+    <script data-goatcounter="https://goatcounter.com" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="top-nav">
+        <a href="index.html" class="btn-home">🏠 મુખ્ય વેબસાઇટ</a>
+        <a href="quiz.html" class="btn-home">📝 Smart Quiz (1,640 MCQs)</a>
+    </div>
+    <header>
+        <div class="badge">📚 Std 10 • All 6 Subjects • Smart Edu & Tech</div>
+        <h1>Std 10 Smart Revision Hub</h1>
+        <p class="subtitle">ગણિત, વિજ્ઞાન, અંગ્રેજી, સામાજિક વિજ્ઞાન, ગુજરાતી અને સંસ્કૃત — શોર્ટ સૂત્રો, વ્યાકરણ ટ્રિક્સ & IMP</p>
+    </header>
+    <div class="controls">
+        <div class="board-group">
+            <button class="tab-btn active" onclick="setBoard('GSEB', this)">🇮🇳 GSEB (ગુજરાતી માધ્યમ)</button>
+            <button class="tab-btn" onclick="setBoard('CBSE', this)">📘 CBSE (English Medium)</button>
+        </div>
+        <div class="subject-grid" id="subjectButtons">
+            <button class="tab-btn active" onclick="setSubject('MATHS', this)">📐 ગણિત</button>
+            <button class="tab-btn" onclick="setSubject('SCIENCE', this)">🔬 વિજ્ઞાન</button>
+            <button class="tab-btn" onclick="setSubject('ENG', this)">🔤 અંગ્રેજી</button>
+            <button class="tab-btn" onclick="setSubject('SS', this)">🌍 સામાજિક વિજ્ઞાન</button>
+            <button class="tab-btn" onclick="setSubject('GUJ', this)">📖 ગુજરાતી</button>
+            <button class="tab-btn" onclick="setSubject('SANS', this)">🕉️ સંસ્કૃત</button>
+        </div>
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 કોઈપણ સૂત્ર, વ્યાકરણ કે ટોપિક શોધો (દા.ત. ત્રિકોણમિતિ, અલંકાર, Tenses, સમાસ, pH)..." onkeyup="renderCards()">
+    </div>
+    <div id="cardsContainer" class="revision-grid"></div>
+    <footer>Made with ❤️ by <strong>Het Patel</strong> | Smart Edu & Tech • 2026</footer>
+</div>
+<script>
+    let currentBoard = 'GSEB';
+    let currentSubject = 'MATHS';
+
+    const revisionData = {
+        GSEB: {
+            MATHS: [
+                {
+                    title: "૧. બહુપદીઓ અને દ્વિઘાત સમીકરણ (Ch 2 & 4)",
+                    tag: "બીજગણિત • IMP સૂત્રો",
+                    points: [
+                        "<span class='highlight'>શૂન્યોનો સરવાળો (α + β):</span> <span class='formula'>-b / a</span> | <span class='highlight'>શૂન્યોનો ગુણાકાર (α · β):</span> <span class='formula'>c / a</span>",
+                        "<span class='highlight'>વિવેચક (D):</span> <span class='formula'>D = b² - 4ac</span> (D > 0: બે ભિન્ન બીજ; D = 0: સમાન બીજ; D < 0: વાસ્તવિક બીજ ન મળે)."
+                    ],
+                    trick: "💡 દ્વિઘાત સૂત્ર: x = (-b ± √D) / 2a — બોર્ડમાં 2 કે 3 ગુણનો દાખલો પાક્કો!"
+                },
+                {
+                    title: "૨. સમાંતર શ્રેણી અને ત્રિકોણમિતિ (Ch 5 & 8)",
+                    tag: "સૂત્રો • ખાસ યાદ રાખો",
+                    points: [
+                        "<span class='highlight'>n મું પદ:</span> <span class='formula'>aₙ = a + (n - 1)d</span> | <span class='highlight'>સરવાળો:</span> <span class='formula'>Sₙ = n/2 [2a + (n - 1)d]</span>",
+                        "<span class='highlight'>નિત્યસમો:</span> <span class='formula'>sin²θ + cos²θ = 1</span> | <span class='formula'>1 + tan²θ = sec²θ</span> | <span class='formula'>1 + cot²θ = cosec²θ</span>"
+                    ],
+                    trick: "💡 ટ્રિક: 'સા-ક, પા-ક, સા-પા' (sin=સામે/કર્ણ, cos=પાસે/કર્ણ, tan=સામે/પાસે)."
+                },
+                {
+                    title: "૩. પૃષ્ઠફળ-ઘનફળ અને આંકડાશાસ્ત્ર (Ch 12 & 13)",
+                    tag: "ઘનફળ & મધ્યક-બહુલક",
+                    points: [
+                        "<span class='highlight'>નળાકાર:</span> વક્રસપાટી = <span class='formula'>2πrh</span>, ઘનફળ = <span class='formula'>πr²h</span> | <span class='highlight'>શંકુ:</span> ઘનફળ = <span class='formula'>1/3 πr²h</span>",
+                        "<span class='highlight'>ગોલક:</span> પૃષ્ઠફળ = <span class='formula'>4πr²</span>, ઘનફળ = <span class='formula'>4/3 πr³</span> | <span class='highlight'>સંબંધ:</span> <span class='formula'>Z = 3M - 2x̄</span>"
+                    ],
+                    trick: "💡 આંકડાશાસ્ત્ર અને સંભાવના (Ch 13 & 14) મળીને 20+ ગુણનું પૂછાય છે!"
+                }
+            ],
+            SCIENCE: [
+                {
+                    title: "૧. રાસાયણિક સૂત્રો અને pH માપક્રમ (Ch 1 & 2)",
+                    tag: "રસાયણ વિજ્ઞાન • IMP",
+                    points: [
+                        "<span class='highlight'>વિરંજન પાઉડર:</span> <span class='formula'>CaOCl₂</span> | <span class='highlight'>બેકિંગ સોડા:</span> <span class='formula'>NaHCO₃</span>",
+                        "<span class='highlight'>ધોવાનો સોડા:</span> <span class='formula'>Na₂CO₃ · 10H₂O</span> | <span class='highlight'>POP:</span> <span class='formula'>CaSO₄ · ½H₂O</span>",
+                        "<span class='highlight'>pH:</span> pH < 7 (એસિડ), pH = 7 (તટસ્થ), pH > 7 (બેઇઝ). મોંની pH 5.5 થી ઘટે ત્યારે દાંતનો સડો થાય."
+                    ],
+                    trick: "💡 જઠરમાં HCl એસિડ ઉત્પન્ન થાય છે, જેની એસિડિટી દૂર કરવા મિલ્ક ઓફ મેગ્નેશિયા Mg(OH)₂ વપરાય."
+                },
+                {
+                    title: "૨. જૈવિક ક્રિયાઓ, પ્રકાશ અને વિદ્યુત (Ch 5, 9, 11)",
+                    tag: "જીવ & ભૌતિક વિજ્ઞાન",
+                    points: [
+                        "<span class='highlight'>અરીસાનું સૂત્ર:</span> <span class='formula'>1/v + 1/u = 1/f</span> | <span class='highlight'>લેન્સનું સૂત્ર:</span> <span class='formula'>1/v - 1/u = 1/f</span>",
+                        "<span class='highlight'>ઓહ્મનો નિયમ:</span> <span class='formula'>V = IR</span> | <span class='highlight'>વિદ્યુત પાવર:</span> <span class='formula'>P = VI = I²R</span>",
+                        "<span class='highlight'>આંખની ખામી:</span> લઘુદ્રષ્ટિ → અંતર્ગોળ લેન્સ | ગુરુદ્રષ્ટિ → બહિર્ગોળ લેન્સ."
+                    ],
+                    trick: "💡 IMP આકૃતિઓ: પાચનતંત્ર, મનુષ્યનું હૃદય, નેફ્રોન, ચેતાકોષ."
+                }
+            ],
+            ENG: [
+                {
+                    title: "1. Language Functions & Grammar (Section C)",
+                    tag: "English Grammar • Scoring",
+                    points: [
+                        "<span class='highlight'>Habitual Past:</span> 'used to' | <span class='highlight'>Condition:</span> 'If / Unless' | <span class='highlight'>Contrast:</span> 'though / although / but / yet'.",
+                        "<span class='highlight'>Active-Passive:</span> Simple Present (am/is/are + V3), Simple Past (was/were + V3), Continuous (being + V3), Perfect (been + V3).",
+                        "<span class='highlight'>Indirect Speech:</span> said to → told (સાદું), asked (પ્રશ્નાર્થ - if/whether), requested/ordered (આજ્ઞાર્થ - to)."
+                    ],
+                    trick: "💡 Passive Voice માં હંમેશા ક્રિયાપદનું ત્રીજું રૂપ (V3) જ આવે!"
+                },
+                {
+                    title: "2. IMP Essays & Email Writing (Section E)",
+                    tag: "Writing • 11 Marks",
+                    points: [
+                        "<span class='highlight'>IMP Essays:</span> My Ambition in Life, Advantages & Disadvantages of Mobile Phone, Save Environment, My Favourite Teacher.",
+                        "<span class='highlight'>Email Format:</span> From, To, Date, Subject લખીને બોક્સ (Box) માં લખવું."
+                    ],
+                    trick: "💡 Email અને Report Writing માં યોગ્ય ફોર્મેટ જાળવવાથી પૂરા માર્ક્સ મળે છે."
+                }
+            ],
+            SS: [
+                {
+                    title: "૧. ભારતનો સાંસ્કૃતિક અને સાહિત્યિક વારસો (Ch 1, 3, 4)",
+                    tag: "ઇતિહાસ • IMP",
+                    points: [
+                        "<span class='highlight'>પ્રાચીન વિદ્યાપીઠો:</span> નાલંદા (બિહાર), તક્ષશિલા (પાકિસ્તાન), વલભી (ભાવનગર), વિક્રમશિલા (બિહાર).",
+                        "<span class='highlight'>સાહિત્ય:</span> કાલિદાસ (અભિજ્ઞાનશાકુંતલમ્, મેઘદૂતમ્), બાણભટ્ટ (હર્ષચરિતમ્, કાદમ્બરી), કૌટિલ્ય (અર્થશાસ્ત્ર)."
+                    ],
+                    trick: "💡 ટ્રિક (વિદ્યાપીઠ): 'ના-ત-વ-વિ' (નાલંદા, તક્ષશિલા, વલભી, વિક્રમશિલા)."
+                },
+                {
+                    title: "૨. ભૂગોળ, નકશો અને ગ્રાહક જાગૃતિ (Ch 8, 11, 12, 18)",
+                    tag: "ભૂગોળ & અર્થશાસ્ત્ર",
+                    points: [
+                        "<span class='highlight'>કાળી જમીન (રેગુર):</span> કપાસ માટે શ્રેષ્ઠ (મહારાષ્ટ્ર, ગુજરાત). <span class='highlight'>સોલર પાર્ક:</span> ચારણકા (પાટણ).",
+                        "<span class='highlight'>ગુણવત્તા માર્કા:</span> ISI (ઔદ્યોગિક), AGMARK (ખેતી), HALLMARK (સોનું-ચાંદી), FPO (ફળોના જામ/જ્યુસ)."
+                    ],
+                    trick: "💡 કોલસાના ૪ પ્રકાર: 'એ-બી-લિ-પી' (એન્થ્રેસાઇટ, બિટ્યુમિનસ, લિગ્નાઇટ, પીટ)."
+                }
+            ],
+            GUJ: [
+                {
+                    title: "૧. સમાસ અને અલંકાર ઓળખ ટ્રિક્સ (વ્યાકરણ)",
+                    tag: "ગુજરાતી વ્યાકરણ • IMP",
+                    points: [
+                        "<span class='highlight'>દ્વંદ્વ સમાસ:</span> 'અને/કે' થી છૂટો પડે (માતા-પિતા) | <span class='highlight'>દ્વિગુ સમાસ:</span> પ્રથમ પદ સંખ્યા (નવરાત્રિ).",
+                        "<span class='highlight'>તત્પુરુષ:</span> વિભક્તિ પ્રત્યય (નો, ની, નું, ના) થી છૂટો પડે | <span class='highlight'>કર્મધારય:</span> 'રૂપી/જેવું' આવે (મહાદેવ).",
+                        "<span class='highlight'>અલંકાર:</span> ઉપમા (જેવું, સમું, સરખું), ઉત્પ્રેક્ષા (જાણે, રખે, શકે), રૂપક (એકરૂપતા)."
+                    ],
+                    trick: "💡 છંદ (17 અક્ષર): પહેલો અક્ષર લઘુ હોય તો 'શિખરિણી' અને ગુરુ હોય તો 'મંદાક્રાંતા'!"
+                }
+            ],
+            SANS: [
+                {
+                    title: "૧. કૃદંત અને સમાસ ઓળખ ટ્રિક્સ (વ્યાકરણ)",
+                    tag: "સંસ્કૃત વ્યાકરણ • IMP",
+                    points: [
+                        "<span class='highlight'>કૃદંત:</span> <span class='formula'>-ત્વા / -ય</span> (સંબંધક ભૂતકૃદંત), <span class='formula'>-તુમ્</span> (હેત્વર્થ), <span class='formula'>-તવ્ય / -અનીય</span> (વિદ્યર્થ).",
+                        "<span class='highlight'>સમાસ:</span> દ્વંદ્વ ('ચ' થી વિગ્રહ), બહુવ્રીહિ ('યસ્ય સઃ'), ઉપપદ તત્પુરુષ (પાછળ દ, જ, સ્થ, કર, ધર હોય)."
+                    ],
+                    trick: "💡 IMP શ્લોકો: સમ્ ગચ્છધ્વમ્..., સર્વે ભવન્તુ સુખિનઃ..., આપત્સુ રામઃ..., અનાથો દરિદ્રો..."
+                }
+            ]
+        },
+        CBSE: {
+            MATHS: [
+                {
+                    title: "1. Algebra, AP & Trigonometry Formulas",
+                    tag: "CBSE Maths • IMP",
+                    points: [
+                        "<span class='highlight'>Quadratic:</span> <span class='formula'>D = b² - 4ac</span> | <span class='highlight'>AP:</span> <span class='formula'>aₙ = a + (n - 1)d</span>, <span class='formula'>Sₙ = n/2 [2a + (n - 1)d]</span>",
+                        "<span class='highlight'>Trigonometry:</span> <span class='formula'>sin²θ + cos²θ = 1</span> | <span class='highlight'>Statistics:</span> <span class='formula'>Mode = 3 Median - 2 Mean</span>"
+                    ],
+                    trick: "💡 Sum of zeroes (α + β) = -b/a and Product (αβ) = c/a."
+                }
+            ],
+                        SCIENCE: [
+                {
+                    title: "1. Chemistry & Physics Key Formulas",
+                    tag: "CBSE Science • IMP",
+                    points: [
+                        "<span class='highlight'>Formulas:</span> Baking Soda (<span class='formula'>NaHCO₃</span>), Washing Soda (<span class='formula'>Na₂CO₃·10H₂O</span>), POP (<span class='formula'>CaSO₄·½H₂O</span>).",
+                        "<span class='highlight'>Physics:</span> Mirror <span class='formula'>1/v + 1/u = 1/f</span> | Lens <span class='formula'>1/v - 1/u = 1/f</span> | Ohm's Law <span class='formula'>V = IR</span>."
+                    ],
+                    trick: "💡 Alkanes: CₙH₂ₙ₊₂ | Alkenes: CₙH₂ₙ | Alkynes: CₙH₂ₙ₋₂"
+                }
+            ],
+            ENG: [
+                {
+                    title: "1. Grammar & Analytical Paragraph",
+                    tag: "CBSE English • Scoring",
+                    points: [
+                        "<span class='highlight'>Subject-Verb:</span> Either/Or, Neither/Nor agrees with nearest subject. Each/Every takes singular verb.",
+                        "<span class='highlight'>Analytical Paragraph:</span> Start with 'The given chart illustrates...', compare data in 100-120 words."
+                    ],
+                    trick: "💡 Countable = Few / A few | Uncountable = Little / A little."
+                }
+            ],
+            SS: [
+                {
+                    title: "1. History Dates, Soils & Federalism",
+                    tag: "CBSE Social Science",
+                    points: [
+                        "<span class='highlight'>Dates:</span> 1815 (Treaty of Vienna), 1919 (Rowlatt Act), 1920 (NCM), 1930 (Dandi March).",
+                        "<span class='highlight'>Soils & Lists:</span> Black Soil (Cotton), Alluvial (Khadar/Bangar). Education & Forests = Concurrent List."
+                    ],
+                    trick: "💡 Rabi = Winter (Wheat) | Kharif = Monsoon (Rice/Cotton)."
+                }
+            ],
+            GUJ: [
+                {
+                    title: "૧. સમાસ અને અલંકાર (CBSE Gujarati)",
+                    tag: "વ્યાકરણ • IMP",
+                    points: [
+                        "<span class='highlight'>દ્વંદ્વ સમાસ:</span> 'અને/કે' થી છૂટો પડે | <span class='highlight'>દ્વિગુ સમાસ:</span> પ્રથમ પદ સંખ્યા (નવરાત્રિ).",
+                        "<span class='highlight'>અલંકાર:</span> ઉપમા (જેવું, સમું, સરખું), ઉત્પ્રેક્ષા (જાણે, રખે, શકે)."
+                    ],
+                    trick: "💡 નિબંધ અને અહેવાલ લેખનમાં મુદ્દાસર ફકરા પાડીને લખવું."
+                }
+            ],
+            SANS: [
+                {
+                    title: "૧. કૃદંત અને સમાસ (CBSE Sanskrit)",
+                    tag: "વ્યાકરણ • IMP",
+                    points: [
+                        "<span class='highlight'>કૃદંત:</span> -ત્વા / -ય (સંબંધક), -તુમ્ (હેત્વર્થ), -તવ્ય / -અનીય (વિદ્યર્થ).",
+                        "<span class='highlight'>સમાસ:</span> દ્વંદ્વ ('ચ'), તત્પુરુષ (વિભક્તિ), અવ્યયીભાવ (યથા, ઉપ, અનુ, પ્રતિ)."
+                    ],
+                    trick: "💡 અપઠિત ગદ્યાંશના જવાબો ફકરામાંથી જ શોધીને પૂરા વાક્યમાં લખવા."
+                }
+            ]
+        }
+    };
+
+    function setBoard(board, btn) {
+        currentBoard = board;
+        btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderCards();
+    }
+
+    function setSubject(subject, btn) {
+        currentSubject = subject;
+        document.getElementById('subjectButtons').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderCards();
+    }
+
+    function renderCards() {
+        const container = document.getElementById('cardsContainer');
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const items = revisionData[currentBoard][currentSubject] || [];
+        container.innerHTML = '';
+
+        const filtered = items.filter(item => 
+            item.title.toLowerCase().includes(query) || 
+            item.tag.toLowerCase().includes(query) ||
+            item.points.some(p => p.toLowerCase().includes(query)) ||
+            (item.trick && item.trick.toLowerCase().includes(query))
+        );
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="rev-card" style="text-align:center; color:#94a3b8;">કોઈ પરિણામ મળ્યું નથી. બીજો શબ્દ સર્ચ કરો.</div>`;
+            return;
+        }
+
+        filtered.forEach(item => {
+            const pointsHTML = item.points.map(p => `<li>${p}</li>`).join('');
+            const trickHTML = item.trick ? `<div class="trick-box">${item.trick}</div>` : '';
+            container.innerHTML += `
+                <div class="rev-card">
+                    <div class="card-header">
+                        <div class="card-title">${item.title}</div>
+                        <span class="tag">${item.tag}</span>
+                    </div>
+                    <div class="card-content">
+                        <ul>${pointsHTML}</ul>
+                        ${trickHTML}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    renderCards();
+</script>
+</body>
+</html>
