@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Highway Traffic Racer Pro | Het Patel</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif; user-select: none; }
+        body { background: #090d16; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+        .top-bar { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #1e293b; border-bottom: 2px solid #facc15; }
+        .btn-back { color: #facc15; text-decoration: none; font-size: 0.9rem; font-weight: 700; }
+        .stats { display: flex; gap: 15px; font-size: 0.95rem; font-weight: 700; }
+        #road { position: relative; width: 100%; max-width: 420px; height: 70vh; background: #1e293b; overflow: hidden; border-left: 5px solid #ef4444; border-right: 5px solid #ef4444; }
+        .lane-line { position: absolute; top: 0; bottom: 0; width: 3px; background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.45) 0px, rgba(255,255,255,0.45) 28px, transparent 28px, transparent 56px); }
+        #player { position: absolute; bottom: 20px; width: 26%; left: 37%; text-align: center; font-size: 2.8rem; transition: left 0.14s ease; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.7)); }
+        .item { position: absolute; width: 26%; text-align: center; font-size: 2.5rem; }
+        .controls { width: 100%; max-width: 420px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 10px; background: #0f172a; }
+        .ctrl-btn { padding: 14px; background: #1e293b; border: 2px solid #facc15; color: white; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        .ctrl-btn:active { background: #facc15; color: #0f172a; }
+        #overlay { position: absolute; inset: 0; background: rgba(9, 13, 22, 0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; z-index: 10; }
+        .start-btn { margin-top: 15px; padding: 12px 30px; background: linear-gradient(135deg, #facc15, #f97316); color: #0f172a; border: none; border-radius: 25px; font-size: 1.1rem; font-weight: 800; cursor: pointer; }
+    </style>
+    <script data-goatcounter="https://goatcounter.com" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="btn-back">🏠 Home</a>
+        <div class="stats">
+            <span>🏁 <span id="score">0</span></span>
+            <span>🪙 <span id="coins">0</span></span>
+        </div>
+    </div>
+    <div id="road">
+        <div class="lane-line" style="left: 33.3%;"></div>
+        <div class="lane-line" style="left: 66.6%;"></div>
+        <div id="player">🏎️</div>
+        <div id="overlay">
+            <h2 style="color:#facc15; font-size:1.55rem;">🛣️ Highway Traffic Racer</h2>
+            <p style="color:#cbd5e1; margin-top:8px; font-size:0.95rem;">સામે આવતી ગાડીઓ અને ટ્રકથી બચીને સિક્કા (🪙) ભેગા કરો!</p>
+            <p id="finalScore" style="color:#34d399; font-weight:700; margin-top:10px; display:none;"></p>
+            <button class="start-btn" onclick="startGame()">▶️ રેસ શરૂ કરો</button>
+        </div>
+    </div>
+    <div class="controls">
+        <button class="ctrl-btn" onclick="setLane(0)">⬅️ ડાબે</button>
+        <button class="ctrl-btn" onclick="setLane(1)">⬆️ વચ્ચે</button>
+        <button class="ctrl-btn" onclick="setLane(2)">જમણે ➡️</button>
+    </div>
+
+<script>
+    const road = document.getElementById('road');
+    const player = document.getElementById('player');
+    const laneLefts = ['3.5%', '37%', '70.5%'];
+    let lane = 1, score = 0, coins = 0, speed = 4, running = false, items = [], frame = 0;
+
+    function setLane(l) {
+        lane = l;
+        player.style.left = laneLefts[lane];
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft' && lane > 0) setLane(lane - 1);
+        if (e.key === 'ArrowRight' && lane < 2) setLane(lane + 1);
+    });
+
+    function startGame() {
+        items.forEach(it => it.el.remove());
+        items = [];
+        score = 0; coins = 0; speed = 4; frame = 0; running = true;
+        document.getElementById('score').innerText = score;
+        document.getElementById('coins').innerText = coins;
+        document.getElementById('overlay').style.display = 'none';
+        setLane(1);
+        loop();
+    }
+
+    function loop() {
+        if (!running) return;
+        frame++;
+        if (frame % 10 === 0) {
+            score++;
+            document.getElementById('score').innerText = score;
+            if (score % 25 === 0) speed = Math.min(10, speed + 0.35);
+        }
+
+        if (frame % Math.max(24, 52 - Math.floor(score / 15)) === 0) {
+            const l = Math.floor(Math.random() * 3);
+            const isCoin = Math.random() < 0.32;
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.style.left = laneLefts[l];
+            div.style.top = '-55px';
+            const cars = ['🚙', '🚕', '🚌', '🚚', '🚓'];
+            div.innerText = isCoin ? '🪙' : cars[Math.floor(Math.random() * cars.length)];
+            road.appendChild(div);
+            items.push({ el: div, lane: l, y: -55, isCoin: isCoin });
+        }
+
+        const roadH = road.offsetHeight;
+        items.forEach((it, idx) => {
+            it.y += speed;
+            it.el.style.top = it.y + 'px';
+
+            if (it.lane === lane && it.y + 42 >= roadH - 72 && it.y <= roadH - 22) {
+                if (it.isCoin) {
+                    coins++;
+                    score += 5;
+                    document.getElementById('coins').innerText = coins;
+                    document.getElementById('score').innerText = score;
+                    it.el.remove();
+                    items.splice(idx, 1);
+                } else {
+                    running = false;
+                    document.getElementById('finalScore').style.display = 'block';
+                    document.getElementById('finalScore').innerText = `સ્કોર: ${score} 🏁 | સિક્કા: ${coins} 🪙`;
+                    document.getElementById('overlay').style.display = 'flex';
+                }
+            } else if (it.y > roadH) {
+                it.el.remove();
+                items.splice(idx, 1);
+            }
+        });
+
+        requestAnimationFrame(loop);
+    }
+</script>
+</body>
+</html>
