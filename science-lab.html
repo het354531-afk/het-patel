@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Solar System & Science Lab | Het Patel</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif; }
+        body { background: radial-gradient(circle at top, #1e1b4b 0%, #050811 100%); color: white; min-height: 100vh; padding: 16px; display: flex; flex-direction: column; align-items: center; }
+        .top-nav { width: 100%; max-width: 550px; display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .btn-home { text-decoration: none; color: #38bdf8; background: rgba(255,255,255,0.08); padding: 8px 14px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; border: 1px solid rgba(56,189,248,0.3); }
+        h1 { font-size: 1.45rem; text-align: center; background: linear-gradient(to right, #38bdf8, #facc15, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; }
+        .tabs { display: flex; gap: 10px; width: 100%; max-width: 550px; margin-bottom: 15px; }
+        .tab { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); background: #1e293b; color: #cbd5e1; font-weight: 700; cursor: pointer; text-align: center; }
+        .tab.active { background: linear-gradient(135deg, #0284c7, #4f46e5); color: white; border-color: transparent; }
+        .panel { width: 100%; max-width: 550px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 16px; }
+        canvas { width: 100%; max-width: 400px; display: block; margin: 0 auto; background: #030712; border-radius: 50%; border: 2px solid #312e81; }
+        .planet-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px; }
+        .p-btn { padding: 8px 4px; background: #1e293b; border: 1px solid #38bdf8; color: white; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+        .p-btn:hover { background: #38bdf8; color: #0f172a; }
+        .info-card { margin-top: 14px; background: #1e293b; padding: 14px; border-radius: 12px; border-left: 4px solid #facc15; }
+        .info-card h3 { color: #facc15; margin-bottom: 6px; font-size: 1.05rem; }
+        .info-card p { font-size: 0.9rem; line-height: 1.5; color: #e2e8f0; }
+        .ph-box { text-align: center; padding: 10px; }
+        .ph-display { padding: 20px; border-radius: 16px; margin: 15px 0; font-size: 1.3rem; font-weight: 800; transition: 0.3s; color: white; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        input[type=range] { width: 100%; margin: 12px 0; accent-color: #38bdf8; }
+    </style>
+    <script data-goatcounter="https://goatcounter.com" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+    <div class="top-nav">
+        <a href="index.html" class="btn-home">🏠 મુખ્ય વેબસાઇટ</a>
+    </div>
+    <h1>🔬 ઇન્ટરેક્ટિવ સાયન્સ & સ્પેસ લેબ</h1>
+
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('solar', this)">🪐 સૂર્યમંડળ (Solar System)</button>
+        <button class="tab" onclick="showTab('ph', this)">🧪 pH સ્કેલ લેબ (Std 10)</button>
+    </div>
+
+    <!-- Solar System Section -->
+    <div id="solarPanel" class="panel">
+        <canvas id="solarCanvas" width="400" height="400"></canvas>
+        <div class="planet-btns">
+            <button class="p-btn" onclick="selectPlanet(0)">☿ બુધ</button>
+            <button class="p-btn" onclick="selectPlanet(1)">♀ શુક્ર</button>
+            <button class="p-btn" onclick="selectPlanet(2)">🌍 પૃથ્વી</button>
+            <button class="p-btn" onclick="selectPlanet(3)">♂ મંગળ</button>
+            <button class="p-btn" onclick="selectPlanet(4)">♃ ગુરુ</button>
+            <button class="p-btn" onclick="selectPlanet(5)">♄ શનિ</button>
+            <button class="p-btn" onclick="selectPlanet(6)">♅ યુરેનસ</button>
+            <button class="p-btn" onclick="selectPlanet(7)">♆ નેપ્ચ્યુન</button>
+        </div>
+        <div class="info-card" id="planetInfo">
+            <h3>🌍 પૃથ્વી (Earth)</h3>
+            <p>સૂર્યથી ત્રીજો ગ્રહ અને જીવન ધરાવતો એકમાત્ર જાણીતો ગ્રહ. તેની સપાટી પર ૭૧% પાણી હોવાથી તેને 'નીલો ગ્રહ' કહે છે. ઉપગ્રહ: ૧ (ચંદ્ર).</p>
+        </div>
+    </div>
+
+    <!-- pH Lab Section -->
+    <div id="phPanel" class="panel" style="display:none;">
+        <div class="ph-box">
+            <h2 style="color:#38bdf8; font-size:1.2rem;">🧪 ડિજિટલ pH મીટર અને લિટમસ ટેસ્ટ</h2>
+            <p style="font-size:0.88rem; color:#94a3b8; margin-top:4px;">સ્લાઇડર ફેરવીને pH મૂલ્ય અને પદાર્થનો સ્વભાવ તપાસો:</p>
+            <div id="phDisplay" class="ph-display" style="background:#10b981;">pH = 7 (તટસ્થ - Neutral)</div>
+            <input type="range" id="phSlider" min="0" max="14" value="7" oninput="updatePH()">
+            <div class="info-card" id="phInfo" style="text-align:left;">
+                <h3>💧 શુદ્ધ પાણી (pH = 7)</h3>
+                <p>સ્વભાવ: તટસ્થ (Neutral). લિટમસ પેપર પર કોઈ અસર થતી નથી (રંગ બદલાતો નથી).</p>
+            </div>
+        </div>
+    </div>
+
+<script>
+    function showTab(tab, btn) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('solarPanel').style.display = tab === 'solar' ? 'block' : 'none';
+        document.getElementById('phPanel').style.display = tab === 'ph' ? 'block' : 'none';
+    }
+
+    const planets = [
+        { name: "☿ બુધ (Mercury)", r: 34, size: 4, color: "#a8a29e", spd: 0.04, ang: 0, desc: "સૂર્યની સૌથી નજીકનો અને સૌથી નાનો ગ્રહ. તેને કોઈ ઉપગ્રહ નથી." },
+        { name: "♀ શુક્ર (Venus)", r: 52, size: 6, color: "#fde047", spd: 0.03, ang: 1, desc: "સૌથી તેજસ્વી અને સૌથી ગરમ ગ્રહ (સવારનો તારો / સાંજનો તારો). પૃથ્વીનો જોડિયો ગ્રહ." },
+        { name: "🌍 પૃથ્વી (Earth)", r: 74, size: 7, color: "#38bdf8", spd: 0.022, ang: 2, desc: "સૂર્યથી ત્રીજો ગ્રહ અને જીવન ધરાવતો એકમાત્ર જાણીતો ગ્રહ. ૭૧% પાણી હોવાથી 'નીલો ગ્રહ' કહેવાય." },
+        { name: "♂ મંગળ (Mars)", r: 96, size: 5.5, color: "#ef4444", spd: 0.017, ang: 3, desc: "લોહ-ઓક્સાઇડને કારણે 'લાલ ગ્રહ' તરીકે ઓળખાય છે. બે ઉપગ્રહ: ફોબોસ અને ડીમોસ." },
+        { name: "♃ ગુરુ (Jupiter)", r: 122, size: 11, color: "#fb923c", spd: 0.011, ang: 4, desc: "સૂર્યમંડળનો સૌથી મોટો ગ્રહ. તેના પર વિશાળ લાલ ધબ્બો (Great Red Spot) આવેલો છે." },
+        { name: "♄ શનિ (Saturn)", r: 148, size: 9.5, color: "#eab308", spd: 0.008, ang: 5, desc: "સુંદર વલયો (Rings) ધરાવતો ગ્રહ. તેની ઘનતા પાણી કરતાં પણ ઓછી છે." },
+        { name: "♅ યુરેનસ (Uranus)", r: 170, size: 8, color: "#2dd4bf", spd: 0.006, ang: 1.5, desc: "મિથેન વાયુને કારણે આછા લીલા-વાદળી રંગનો દેખાય છે. સૌથી ઠંડો ગ્રહ." },
+        { name: "♆ નેપ્ચ્યુન (Neptune)", r: 190, size: 8, color: "#6366f1", spd: 0.004, ang: 3.5, desc: "સૂર્યથી સૌથી દૂરનો ગ્રહ. અહીં અત્યંત તેજ પવનો ફૂંકાય છે." }
+    ];
+
+    function selectPlanet(idx) {
+        const p = planets[idx];
+        document.getElementById('planetInfo').innerHTML = `<h3>${p.name}</h3><p>${p.desc}</p>`;
+    }
+
+    const sCanvas = document.getElementById('solarCanvas');
+    const sCtx = sCanvas.getContext('2d');
+
+    function animateSolar() {
+        sCtx.clearRect(0, 0, 400, 400);
+        // Sun
+        sCtx.beginPath();
+        sCtx.arc(200, 200, 18, 0, Math.PI * 2);
+        sCtx.fillStyle = "#facc15";
+        sCtx.shadowBlur = 20;
+        sCtx.shadowColor = "#f59e0b";
+        sCtx.fill();
+        sCtx.shadowBlur = 0;
+
+        planets.forEach(p => {
+            p.ang += p.spd;
+            sCtx.beginPath();
+            sCtx.arc(200, 200, p.r, 0, Math.PI * 2);
+            sCtx.strokeStyle = "rgba(255,255,255,0.12)";
+            sCtx.stroke();
+
+            const x = 200 + Math.cos(p.ang) * p.r;
+            const y = 200 + Math.sin(p.ang) * p.r;
+            sCtx.beginPath();
+            sCtx.arc(x, y, p.size, 0, Math.PI * 2);
+            sCtx.fillStyle = p.color;
+            sCtx.fill();
+        });
+        requestAnimationFrame(animateSolar);
+    }
+    animateSolar();
+
+    const phExamples = {
+        0: ["બેટરી એસિડ (H₂SO₄)", "અત્યંત પ્રબળ એસિડ — ભૂરા લિટમસને લાલ બનાવે."],
+        1: ["જઠરરસ (HCl - pH ~1.2)", "ખોરાકના પાચનમાં મદદરૂપ પ્રબળ એસિડ."],
+        2: ["લીંબુનો રસ (pH ~2.2)", "સાઇટ્રિક એસિડ ધરાવે છે — સ્વાદે ખાટો."],
+        3: ["વિનેગર / સરકો (pH ~3)", "એસિટિક એસિડ ધરાવે છે."],
+        4: ["ટામેટાનો રસ (pH ~4.1)", "ઓક્ઝેલિક એસિડ ધરાવે છે."],
+        5: ["વરસાદનું પાણી / કોફી", "pH 5.6 થી ઓછું થાય તો 'એસિડ વર્ષા' કહેવાય."],
+        6: ["દૂધ / લાળરસ (pH ~6.5)", "નિર્બળ એસિડિક સ્વભાવ."],
+        7: ["શુદ્ધ પાણી (pH = 7)", "તટસ્થ (Neutral) — લિટમસ પર કોઈ અસર નહીં."],
+        8: ["દરિયાનું પાણી / ઈંડું", "નિર્બળ બેઝિક સ્વભાવ."],
+        9: ["બેકિંગ સોડા (NaHCO₃)", "ખાવાનો સોડા — લાલ લિટમસને ભૂરું બનાવે."],
+        10: ["મિલ્ક ઓફ મેગ્નેશિયા Mg(OH)₂", "એસિડિટી દૂર કરવા એન્ટાસિડ તરીકે વપરાય."],
+        11: ["એમોનિયા દ્રાવણ", "મધ્યમ બેઝિક દ્રાવણ."],
+        12: ["સાબુનું પાણી", "સ્પર્શે ચીકણું અને સ્વાદે તૂરું (બેઝિક)."],
+        13: ["બ્લીચિંગ દ્રાવણ", "પ્રબળ બેઝિક સ્વભાવ."],
+        14: ["સોડિયમ હાઇડ્રોક્સાઇડ (NaOH)", "અત્યંત પ્રબળ બેઇઝ — લાલ લિટમસને ઘેરું ભૂરું બનાવે."]
+    };
+
+    function updatePH() {
+        const val = document.getElementById('phSlider').value;
+        const disp = document.getElementById('phDisplay');
+        const info = document.getElementById('phInfo');
+        const colors = ["#dc2626","#ea580c","#f97316","#f59e0b","#eab308","#84cc16","#22c55e","#10b981","#14b8a6","#06b6d4","#0284c7","#2563eb","#4f46e5","#7c3aed","#9333ea"];
+        disp.style.background = colors[val];
+        const type = val < 7 ? "એસિડિક (Acidic)" : (val == 7 ? "તટસ્થ (Neutral)" : "બેઝિક (Basic)");
+        disp.innerText = `pH = ${val} (${type})`;
+        info.innerHTML = `<h3>🧪 ઉદાહરણ: ${phExamples[val]}</h3><p>${phExamples[val]}</p>`;
+    }
+</script>
+</body>
+</html>
