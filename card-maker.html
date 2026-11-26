@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Gujarati Greeting Card Maker | Het Patel</title>
+    <title>Smart Gujarati & School Card Maker | Het Patel</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif; }
         body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; min-height: 100vh; padding: 18px; display: flex; flex-direction: column; align-items: center; }
         .top-nav { width: 100%; max-width: 480px; display: flex; justify-content: space-between; margin-bottom: 15px; }
         .btn-home { text-decoration: none; color: #38bdf8; background: rgba(255,255,255,0.08); padding: 8px 14px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; border: 1px solid rgba(56,189,248,0.3); }
-        h1 { font-size: 1.5rem; text-align: center; background: linear-gradient(to right, #facc15, #f472b6, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
+        h1 { font-size: 1.45rem; text-align: center; background: linear-gradient(to right, #facc15, #f472b6, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
         .form-box { width: 100%; max-width: 480px; background: #1e293b; padding: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 18px; display: flex; flex-direction: column; gap: 10px; }
         label { font-size: 0.85rem; color: #cbd5e1; font-weight: 600; }
         select, input, textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: #0f172a; color: white; font-size: 0.95rem; outline: none; }
         select:focus, input:focus, textarea:focus { border-color: #facc15; }
+        .photo-row { display: flex; gap: 8px; align-items: center; }
+        .btn-clear { padding: 10px 12px; background: #ef4444; color: white; border: none; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
         .canvas-wrap { width: 100%; max-width: 480px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
         canvas { width: 100%; max-width: 400px; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.2); }
         .btn-dl { width: 100%; max-width: 400px; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
@@ -30,7 +32,7 @@
 
     <div class="form-box">
         <div>
-            <label>પ્રસંગ પસંદ કરો (સામાન્ય & સ્કૂલ કાર્ડ્સ):</label>
+            <label>પ્રસંગ અથવા તહેવાર પસંદ કરો:</label>
             <select id="occasion" onchange="updatePreset()">
                 <option value="🎓 પરીક્ષા માટે ખૂબ ખૂબ શુભેચ્છાઓ! ✍️">🎓 સ્કૂલ: પરીક્ષા શુભેચ્છા (All The Best)</option>
                 <option value="👩‍🏫 શિક્ષક દિનની હાર્દિક શુભેચ્છાઓ! 🙏">👩‍🏫 સ્કૂલ: શિક્ષક દિન / ગુરુ વંદના</option>
@@ -39,11 +41,24 @@
                 <option value="🎂 જન્મદિવસની ખૂબ ખૂબ શુભેચ્છાઓ!">🎂 જન્મદિવસ (Happy Birthday)</option>
                 <option value="✨ આજનો સુવિચાર ✨">💡 આજનો સુવિચાર (Good Thought)</option>
                 <option value="🏆 ખૂબ ખૂબ અભિનંદન! 🎉">🏆 અભિનંદન (Congratulations)</option>
-                <option value="🙏 નૂતન વર્ષાભિનંદન! 🪔">🪔 તહેવાર શુભેચ્છા (Festival)</option>
+                <option value="🪔 શુભ દિવાળી & નૂતન વર્ષાભિનંદન! ✨">🪔 દિવાળી અને નવું વર્ષ</option>
+                <option value="🪁 ઉત્તરાયણ (મકરસંક્રાંતિ) ની શુભેચ્છાઓ! ☀️">🪁 ઉત્તરાયણ (મકરસંક્રાંતિ)</option>
+                <option value="🎨 હોળી - ધુળેટીની રંગબેરંગી શુભેચ્છાઓ! 💦">🎨 હોળી - ધુળેટી</option>
+                <option value="🧵 રક્ષાબંધન પર્વની હાર્દિક શુભેચ્છાઓ! ❤️">🧵 રક્ષાબંધન</option>
+                <option value="🦚 જન્માષ્ટમી પર્વની હાર્દિક શુભકામનાઓ! 🪈">🦚 જન્માષ્ટમી (કૃષ્ણ જન્મોત્સવ)</option>
+                <option value="🔱 નવરાત્રિ મહોત્સવની હાર્દિક શુભેચ્છાઓ! 💃">🔱 નવરાત્રિ મહોત્સવ</option>
+                <option value="🐘 ગણેશ ચતુર્થીની હાર્દિક શુભકામનાઓ! 🙏">🐘 ગણેશ ચતુર્થી</option>
             </select>
         </div>
         <div>
-            <label>જેમને મોકલવું છે તેમનું નામ (વિદ્યાર્થી / શિક્ષક / મિત્ર):</label>
+            <label>📸 ફોટો ઉમેરો (વૈકલ્પિક - ગેલેરીમાંથી પસંદ કરો):</label>
+            <div class="photo-row">
+                <input type="file" id="photoInput" accept="image/*" onchange="loadPhoto(event)">
+                <button type="button" class="btn-clear" onclick="removePhoto()">❌ હટાવો</button>
+            </div>
+        </div>
+        <div>
+            <label>જેમને મોકલવું છે તેમનું નામ:</label>
             <input type="text" id="toName" value="પ્રિય વિદ્યાર્થી મિત્રો" oninput="drawCard()">
         </div>
         <div>
@@ -69,13 +84,35 @@
     </div>
 
     <div class="canvas-wrap">
-        <canvas id="cardCanvas" width="800" height="800"></canvas>
+        <canvas id="cardCanvas" width="800" height="850"></canvas>
         <button class="btn-dl" onclick="downloadCard()">⬇️ HD કાર્ડ ડાઉનલોડ કરો (PNG)</button>
     </div>
 
 <script>
     const canvas = document.getElementById('cardCanvas');
     const ctx = canvas.getContext('2d');
+    let uploadedImg = null;
+
+    function loadPhoto(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                uploadedImg = img;
+                drawCard();
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function removePhoto() {
+        uploadedImg = null;
+        document.getElementById('photoInput').value = '';
+        drawCard();
+    }
 
     function updatePreset() {
         const occ = document.getElementById('occasion').value;
@@ -100,9 +137,27 @@
         } else if (occ.includes('અભિનંદન')) {
             toName.value = "પ્રિય વિજેતા";
             msg.value = "તમારી આ શાનદાર સિદ્ધિ બદલ શાળા પરિવાર તરફથી ખૂબ ખૂબ અભિનંદન! ભવિષ્યમાં હજુ વધુ પ્રગતિ કરો એવી શુભેચ્છા.";
-        } else if (occ.includes('નૂતન')) {
+        } else if (occ.includes('દિવાળી')) {
             toName.value = "સૌ સ્નેહીજનો";
-            msg.value = "આ પાવન પર્વ તમારા જીવનમાં નવી ખુશીઓ, સમૃદ્ધિ અને ઉમંગ લઈને આવે એવી હાર્દિક શુભકામનાઓ!";
+            msg.value = "દીપાવલીનો પ્રકાશ અને નવું વર્ષ આપના જીવનમાં સુખ, શાંતિ, ઉત્તમ સ્વાસ્થ્ય અને સમૃદ્ધિ લઈને આવે એવી હાર્દિક શુભકામનાઓ!";
+        } else if (occ.includes('ઉત્તરાયણ')) {
+            toName.value = "સૌ મિત્રો & પરિવારજનો";
+            msg.value = "આપની પ્રગતિનો પતંગ સદા આકાશની ઊંચાઈઓ સર કરે અને જીવનમાં મીઠાશ બની રહે એવી મકરસંક્રાંતિની હાર્દિક શુભેચ્છાઓ!";
+        } else if (occ.includes('હોળી')) {
+            toName.value = "સૌ સ્નેહીજનો";
+            msg.value = "પ્રેમ, આનંદ અને ઉમંગના રંગોથી આપનું જીવન સદા મહેકતું રહે એવી હોળી અને ધુળેટીની ખૂબ ખૂબ શુભકામનાઓ!";
+        } else if (occ.includes('રક્ષાબંધન')) {
+            toName.value = "વ્હાલા ભાઈ / બહેન";
+            msg.value = "ભાઈ-બહેનના અતૂટ સ્નેહ અને વિશ્વાસના પવિત્ર પર્વ રક્ષાબંધનની હૃદયપૂર્વક ખૂબ ખૂબ શુભેચ્છાઓ!";
+        } else if (occ.includes('જન્માષ્ટમી')) {
+            toName.value = "સૌ કૃષ્ણભક્તો";
+            msg.value = "ભગવાન શ્રીકૃષ્ણની કૃપા આપના પરિવાર પર સદા વરસતી રહે અને જીવનમાં આનંદ છવાયેલો રહે. જય શ્રી કૃષ્ણ!";
+        } else if (occ.includes('નવરાત્રિ')) {
+            toName.value = "સૌ માઈભક્તો";
+            msg.value = "માં અંબાની આરાધના અને ગરબાના પાવન પર્વ નવરાત્રિની આપ સૌને ખૂબ ખૂબ શુભેચ્છાઓ! જય માતાજી!";
+        } else if (occ.includes('ગણેશ')) {
+            toName.value = "સૌ ગણેશભક્તો";
+            msg.value = "વિઘ્નહર્તા શ્રી ગણેશજી આપના જીવનના તમામ વિઘ્નો દૂર કરી સુખ-સમૃદ્ધિ આપે એવી હાર્દિક શુભકામનાઓ! ગણપતિ બાપ્પા મોરયા!";
         } else {
             toName.value = "પ્રિય મિત્ર";
             msg.value = "ઈશ્વર તમને ઉત્તમ સ્વાસ્થ્ય, સુખ, શાંતિ અને દરેક ક્ષેત્રમાં અપાર સફળતા અર્પે એવી હાર્દિક શુભકામના!";
@@ -135,49 +190,74 @@
         const fromName = document.getElementById('fromName').value;
         const schoolName = document.getElementById('schoolName').value;
 
-        const grad = ctx.createLinearGradient(0, 0, 800, 800);
+        const grad = ctx.createLinearGradient(0, 0, 800, 850);
         if (theme === 'royal') { grad.addColorStop(0, '#0f172a'); grad.addColorStop(1, '#1e3a8a'); }
         else if (theme === 'sunset') { grad.addColorStop(0, '#3b0764'); grad.addColorStop(1, '#9d174d'); }
         else { grad.addColorStop(0, '#064e3b'); grad.addColorStop(1, '#0f766e'); }
 
         ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, 800, 800);
+        ctx.fillRect(0, 0, 800, 850);
 
         ctx.strokeStyle = '#facc15';
         ctx.lineWidth = 10;
-        ctx.strokeRect(30, 30, 740, 740);
+        ctx.strokeRect(30, 30, 740, 790);
 
         ctx.textAlign = 'center';
         ctx.fillStyle = '#fde047';
-        ctx.font = 'bold 38px "Noto Sans Gujarati", sans-serif';
-        ctx.fillText(occ, 400, 140);
+        ctx.font = 'bold 34px "Noto Sans Gujarati", sans-serif';
+        ctx.fillText(occ, 400, 115);
+
+        let textStartY = 230;
+        if (uploadedImg) {
+            const cx = 400, cy = 235, r = 85;
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+
+            const aspect = uploadedImg.width / uploadedImg.height;
+            let drawW = r * 2, drawH = r * 2;
+            if (aspect > 1) drawW = drawH * aspect;
+            else drawH = drawW / aspect;
+            ctx.drawImage(uploadedImg, cx - drawW / 2, cy - drawH / 2, drawW, drawH);
+            ctx.restore();
+
+            ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.strokeStyle = '#facc15';
+            ctx.lineWidth = 6;
+            ctx.stroke();
+
+            textStartY = 380;
+        }
 
         ctx.fillStyle = '#38bdf8';
-        ctx.font = 'bold 44px "Noto Sans Gujarati", sans-serif';
-        ctx.fillText(toName, 400, 240);
+        ctx.font = 'bold 42px "Noto Sans Gujarati", sans-serif';
+        ctx.fillText(toName, 400, textStartY);
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = '30px "Noto Sans Gujarati", sans-serif';
-        wrapText(msg, 400, 340, 650, 48);
+        ctx.font = '28px "Noto Sans Gujarati", sans-serif';
+        wrapText(msg, 400, textStartY + 75, 650, 44);
 
         ctx.fillStyle = '#facc15';
-        ctx.font = 'bold 32px "Noto Sans Gujarati", sans-serif';
-        ctx.fillText("શુભેચ્છક: " + fromName, 400, 595);
+        ctx.font = 'bold 30px "Noto Sans Gujarati", sans-serif';
+        ctx.fillText("શુભેચ્છક: " + fromName, 400, 680);
 
         if (schoolName.trim() !== "") {
             ctx.fillStyle = '#a7f3d0';
-            ctx.font = 'bold 26px "Noto Sans Gujarati", sans-serif';
-            ctx.fillText("🏫 " + schoolName, 400, 655);
+            ctx.font = 'bold 25px "Noto Sans Gujarati", sans-serif';
+            ctx.fillText("🏫 " + schoolName, 400, 735);
         }
 
         ctx.fillStyle = 'rgba(255,255,255,0.5)';
         ctx.font = '18px Poppins, sans-serif';
-        ctx.fillText("Smart Edu & Tech • Het Patel", 400, 735);
+        ctx.fillText("Smart Edu & Tech • Het Patel", 400, 795);
     }
 
     function downloadCard() {
         const link = document.createElement('a');
-        link.download = 'smart-school-greeting-card.png';
+        link.download = 'smart-festival-school-card.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
     }
