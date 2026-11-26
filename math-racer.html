@@ -56,7 +56,7 @@
     </div>
 
 <script>
-    let lane = 1, score = 0, lives = 3, speed = 3.2, running = false, currentAns = 0, gates = [], animId;
+    let lane = 1, score = 0, lives = 3, speed = 1.3, running = false, currentAns = 0, gates = [], animId;
     const laneLefts = ['3.5%', '37%', '70.5%'];
     const gateLefts = ['1.6%', '35%', '68.3%'];
 
@@ -114,7 +114,7 @@
     }
 
     function startGame() {
-        score = 0; lives = 3; speed = 3.2; running = true;
+        score = 0; lives = 3; speed = 1.3; running = true;
         document.getElementById('score').innerText = score;
         document.getElementById('lives').innerText = lives;
         document.getElementById('overlay').style.display = 'none';
@@ -135,7 +135,8 @@
                 hit = true;
                 if (g.val === currentAns) {
                     score += 10;
-                    speed = Math.min(7.5, speed + 0.25);
+                    speed = Math.min(4.2, speed + 0.08);
+                    
                     document.getElementById('score').innerText = score;
                 } else {
                     lives--;
