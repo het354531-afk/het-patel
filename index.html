@@ -3,235 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Het Patel | AI, Games & Smart Edu</title>
-
-<!-- WhatsApp & Social Media Link Preview Card -->
-<meta property="og:title" content="Het Patel | Smart Edu • AI • Gaming">
-<meta property="og:description" content="ગુજરાતીમાં વાત કરતું het AI, ૧૦૦ અલગ લેવલ + ૫ મોડ્સ વાળી Car Parking ગેમ અને અમારી YouTube & Facebook ચેનલની મુલાકાત લો!">
-<meta property="og:image" content="https://het354531-afk.github.io/het-patel/card..jpg">
-<meta property="og:url" content="https://het354531-afk.github.io/het-patel/">
-<meta property="og:type" content="website">
-
+<title>Het Patel | Smart Edu, AI & Games</title>
+<link rel="preconnect" href="https://googleapis.com">
+<link rel="preconnect" href="https://gstatic.com" crossorigin>
+<link href="https://googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<script data-goatcounter="https://goatcounter.com" async src="//gc.zgo.at/count.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  
   body {
-    background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e);
-    background-size: 400% 400%;
-    animation: gradientBG 12s ease infinite;
-    color: #ffffff;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #090d16;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 35px 16px;
+    font-family: 'Noto Sans Gujarati', 'Poppins', sans-serif;
+    padding: 16px;
   }
-
-  @keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+  .poster {
+    width: 100%;
+    max-width: 540px;
+    background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    border: 2px solid rgba(56, 189, 248, 0.3);
+    border-radius: 24px;
+    padding: 24px 18px;
+    color: #ffffff;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.15);
   }
-
-  .badge {
-    background: linear-gradient(90deg, #ff007f, #7928ca, #00d2ff);
-    padding: 7px 18px;
-    border-radius: 30px;
-    font-size: 13px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
-    margin-bottom: 16px;
-  }
-
-  h1 {
-    font-size: 38px;
-    font-weight: 800;
-    margin-bottom: 10px;
+  .header {
     text-align: center;
-    background: linear-gradient(to right, #00f2fe, #4facfe, #f093fb, #f5576c);
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    color: #0f172a;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 800;
+    background: linear-gradient(to right, #ffffff, #7dd3fc);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
   }
-
-  .intro {
-    color: #e2e8f0;
-    text-align: center;
-    max-width: 480px;
-    line-height: 1.6;
-    font-size: 15px;
-    margin-bottom: 32px;
-  }
-
-  .cards {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-    width: 100%;
-    max-width: 460px;
-  }
-
-  .card {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 24px;
-    border: 1.5px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-
-  .card:hover {
-    transform: translateY(-5px);
-  }
-
-  .card-ai { border-top: 4px solid #00f2fe; }
-  .card-game { border-top: 4px solid #f6d365; }
-  .card-yt { border-top: 4px solid #ff0844; }
-  .card-fb { border-top: 4px solid #1877f2; }
-  .card-ig { border-top: 4px solid #e1306c; }
- .card-quiz { border-top: 4px solid #10b981; }
- 
-  .icon { font-size: 36px; margin-bottom: 10px; }
-  
-  .card h2 {
-    font-size: 21px;
-    margin-bottom: 8px;
-    color: #ffffff;
-  }
-
-  .card p {
+  .header p {
+    font-size: 12.5px;
     color: #cbd5e1;
-    font-size: 14px;
-    line-height: 1.55;
-    margin-bottom: 20px;
+    font-weight: 600;
   }
-
-  .btn {
-    display: block;
-    text-align: center;
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    padding: 11px;
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
     text-decoration: none;
-    padding: 13px 20px;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 16px;
-    color: #fff;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    transition: opacity 0.2s, transform 0.1s;
+    color: inherit;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
-
-  .btn:active { transform: scale(0.97); }
-
-  .btn-ai { background: linear-gradient(90deg, #00c6ff, #0072ff); }
-  .btn-game { background: linear-gradient(90deg, #f7971e, #ffd200); color: #111; }
-  .btn-yt { background: linear-gradient(90deg, #ff0844, #ffb199); color: #fff; }
-  .btn-fb { background: linear-gradient(90deg, #1877f2, #00c6ff); color: #fff; }
-  .btn-ig { background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045); color: #fff; }
- .btn-quiz { background: linear-gradient(90deg, #10b981, #059669); }
-   
-  footer {
-    margin-top: auto;
-    padding-top: 40px;
-    color: #94a3b8;
-    font-size: 13px;
+  .card:hover, .card:active {
+    transform: translateY(-2px) scale(1.01);
+    background: rgba(56, 189, 248, 0.14);
+    border-color: #38bdf8;
+  }
+  .icon {
+    font-size: 20px;
+    background: rgba(56, 189, 248, 0.15);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .card-info h3 {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 2px;
+    line-height: 1.25;
+  }
+  .card-info p {
+    font-size: 10.5px;
+    color: #e2e8f0;
+    line-height: 1.3;
+  }
+  .footer {
+    margin-top: 16px;
+    background: linear-gradient(90deg, rgba(56, 189, 248, 0.15), rgba(129, 140, 248, 0.15));
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 14px;
+    padding: 10px 14px;
     text-align: center;
+  }
+  .footer .visit {
+    font-size: 11.5px;
+    color: #e2e8f0;
+    font-weight: 600;
   }
 </style>
 </head>
 <body>
 
-  <div class="badge">✨ Smart Edu • AI • Gaming</div>
-  <h1>Het Patel</h1>
-  <p class="intro">નમસ્તે! હું <strong>Het Patel</strong> છું. મેં બનાવેલા સ્માર્ટ AI ટૂલ, વેબ ગેમ્સ અને અમારી શૈક્ષણિક YouTube તથા Facebook ચેનલની મુલાકાત નીચેથી લો.</p>
-
-  <div class="cards">
-    <div class="card card-ai">
-      <div class="icon">🤖</div>
-      <h2>het AI - Smart Assistant</h2>
-      <p>ગુજરાતી અને અંગ્રેજીમાં સવાલોના જવાબ આપતું સ્માર્ટ AI ચેટબોટ, જેમાં વૉઇસ ટાઇપિંગ (માઇક) અને ચેટ હિસ્ટ્રી જેવા ફીચર્સ સામેલ છે.</p>
-      <a href="https://het-ai.vercel.app" class="btn btn-ai">🚀 het AI ખોલો</a>
-    </div>
-
-    <div class="card card-game">
-      <div class="icon">🏎</div>
-      <h2>Car Parking 100 - Pro</h2>
-      <p>૧૦૦ અલગ-અલગ લેવલ, ૫ નવા મોડ્સ (City, Cone, Night, Traffic & Rain), લાઈવ સ્કોર બોર્ડ અને રિયલ સાઉન્ડ ઇફેક્ટ્સ સાથેની મજેદાર મોબાઈલ કાર પાર્કિંગ ગેમ.</p>
-      <a href="game.html" class="btn btn-game">🎮 ગેમ રમો</a>
-    </div>
-
-    <div class="card card-yt">
-      <div class="icon">📺</div>
-      <h2>Minesh Patel | Smart Edu & Tech</h2>
-      <p>પ્રા.શાળા કુંભારી તલાવડી, બોરસદ — ડિજિટલ શિક્ષણ, AI ટૂલ્સ અને વેબ ગેમ્સના વિડિઓ જોવા અમારી YouTube ચેનલ સાથે જોડાઓ.</p>
-            <a href="https://youtube.com/@MineshPatelTech" data-goatcounter-click="click-youtube" class="btn btn-yt">▶ YouTube ચેનલ જુઓ</a>
-     
-    </div>
-
-    <div class="card card-fb">
-      <div class="icon">📘</div>
-      <h2>Het Patel - Smart Edu & Tech</h2>
-      <p>નવી ગેમ્સ, AI ટૂલ્સ અને ટેક અપડેટ્સ માટે અમારા ઓફિશિયલ Facebook પેજને Follow કરો.</p>
-            <a href="https://facebook.com/share/1C3w9CT3dY/
-                   " data-goatcounter-click="click-facebook" class="btn btn-fb">👍 Facebook પેજ જુઓ</a>
-     
-     
-    </div>
-       <div class="card card-ig">
-      <div class="icon">📸</div>
-      <h2>Het Patel | Instagram</h2>
-      <p>શોર્ટ Reels, AI ટિપ્સ અને નવી ગેમ્સના અપડેટ્સ માટે અમારા Instagram પેજ (@het0.2674) ને Follow કરો.</p>
-      <a href="https://instagram.com/het0.2674/
-          " data-goatcounter-click="click-instagram" class="btn btn-ig">📷 Instagram પેજ જુઓ</a>
-        
-       </div>
-       <div class="card card-quiz">
-      <div class="icon">🎓</div>
-      <h2>Std 10 Smart Quiz</h2>
-      <p>GSEB અને CBSE ધોરણ ૧૦ ના વિદ્યાર્થીઓ માટે ચેપ્ટર-વાઇઝ MCQ ક્વિઝ, લાઈવ માર્ક્સ અને સમજૂતી સાથે.</p>
-      <a href="quiz.html" class="btn btn-quiz"
-         data-goatcounter-click="click-std10-quiz"
-         data-goatcounter-title="Std 10 Smart Quiz Click">📝 ક્વિઝ રમો</a>
-       </div>
-           <div class="card card-quiz">
-            <div class="icon">📚</div>
-            <h2>Std 10 Smart Revision Hub</h2>
-            <p>GSEB અને CBSE ધોરણ ૧૦ (ગણિત, વિજ્ઞાન, અંગ્રેજી, સા.વિજ્ઞાન, ગુજરાતી અને સંસ્કૃત) ના શોર્ટ સૂત્રો, વ્યાકરણ ટ્રિક્સ અને IMP પોઇન્ટ્સ.</p>
-            <a href="revision.html" class="btn btn-quiz"
-               data-goatcounter-click="click-revision-hub"
-               data-goatcounter-title="Std 10 Smart Revision Hub">📖 રિવિઝન શરૂ કરો</a>
-           </div>
-           <div class="card card-game">
-            <div class="icon">🧮</div>
-            <h2>Math Speed Racer</h2>
-            <p>ગણિતના દાખલાનો સાચો જવાબ શોધીને હાઇવે પર ગાડીની સ્પીડ વધારો! (સ્માર્ટ એજ્યુ-ગેમ)</p>
-            <a href="math-racer.html" class="btn btn-game"
-               data-goatcounter-click="click-math-racer"
-               data-goatcounter-title="Math Speed Racer">🏎️ ગેમ રમો</a>
-        </div>
-
-        <div class="card card-game">
-            <div class="icon">🚀</div>
-            <h2>Space Shooter Pro</h2>
-            <p>સ્પેસશિપ ઉડાવીને દુશ્મન UFO અને ઉલ્કાઓને તોડો અને હાઇ-સ્કોર બનાવો!</p>
-            <a href="space-shooter.html" class="btn btn-game"
-               data-goatcounter-click="click-space-shooter"
-               data-goatcounter-title="Space Shooter Pro">🎮 મિશન શરૂ કરો</a>
-        </div>
-
-        <div class="card card-game">
-            <div class="icon">🛣️</div>
-            <h2>Highway Traffic Racer</h2>
-            <p>હાઇ-સ્પીડ હાઇવે પર સામે આવતી ગાડીઓ અને ટ્રકથી બચીને સિક્કા ભેગા કરો!</p>
-            <a href="highway-racer.html" class="btn btn-game"
-               data-goatcounter-click="click-highway-racer"
-               data-goatcounter-title="Highway Traffic Racer">🏁 રેસ શરૂ કરો</a>
-        </div>
-   
+<div class="poster">
+  <div class="header">
+    <div class="badge">✨ SMART EDU • AI • GAMING ✨</div>
+    <h1>Het Patel | Smart Edu & Tech</h1>
+    <p>કોઈપણ કાર્ડ પર ક્લિક કરીને સીધું ઓપન કરો 👇</p>
   </div>
 
-  <footer>Made with ❤ by <strong>Het Patel</strong> • 2026</footer>
-  <script data-goatcounter="https://hetpatel2012.goatcounter.com/count" async src="//gc.zgo.at"></script>
+  <div class="grid">
+       <a href="https://het-ai.vercel.app" target="_blank" class="card">
+      <div class="icon">🤖</div>
+      <div class="card-info">
+        <h3>het AI Assistant</h3>
+        <p>ગુજરાતી માઇક & PDF સપોર્ટ સાથે સ્માર્ટ AI ચેટબોટ</p>
+      </div>
+    </a>
+
+    <a href="quiz.html" class="card">
+      <div class="icon">🎓</div>
+      <div class="card-info">
+        <h3>Std 10 Smart Quiz</h3>
+        <p>GSEB & CBSE — 1,640 MCQs, લાઈવ માર્ક્સ & સમજૂતી</p>
+      </div>
+    </a>
+
+    <a href="revision.html" class="card">
+      <div class="icon">📚</div>
+      <div class="card-info">
+        <h3>Std 10 Revision Hub</h3>
+        <p>બધા ૬ વિષયના શોર્ટ સૂત્રો, વ્યાકરણ ટ્રિક્સ & IMP</p>
+      </div>
+    </a>
+
+    <a href="game.html" class="card">
+      <div class="icon">🏎️</div>
+      <div class="card-info">
+        <h3>Car Parking 100 Pro</h3>
+        <p>૧૦૦ અલગ લેવલ & ૫ નવા મોડ્સ સાથે કાર પાર્કિંગ ગેમ</p>
+      </div>
+    </a>
+
+    <a href="math-racer.html" class="card">
+      <div class="icon">🧮</div>
+      <div class="card-info">
+        <h3>Math Speed Racer</h3>
+        <p>ગણિતના દાખલા ઉકેલીને ગાડીની સ્પીડ વધારવાની ગેમ</p>
+      </div>
+    </a>
+        <a href="space-shooter.html" class="card">
+      <div class="icon">🚀</div>
+      <div class="card-info">
+        <h3>Space Shooter Pro</h3>
+        <p>સ્પેસશિપ ઉડાવી દુશ્મન UFO અને ઉલ્કાઓ તોડો</p>
+      </div>
+    </a>
+
+    <a href="highway-racer.html" class="card">
+      <div class="icon">🛣️</div>
+      <div class="card-info">
+        <h3>Highway Traffic Racer</h3>
+        <p>૩-લેન ટ્રાફિકથી બચીને કોઈન્સ ભેગા કરવાની ગેમ</p>
+      </div>
+    </a>
+
+    <a href="https://youtube.com/@MineshPatelTech" target="_blank" class="card">
+      <div class="icon">📺</div>
+      <div class="card-info">
+        <h3>YouTube Channel</h3>
+        <p>Minesh Patel | Smart Edu & Tech — ડિજિટલ શિક્ષણ</p>
+      </div>
+    </a>
+
+    <a href="https://facebook.com/share/1C3w9CT3dY/" target="_blank" class="card">
+      <div class="icon">📘</div>
+      <div class="card-info">
+        <h3>Facebook Page</h3>
+        <p>Het Patel - Smart Edu & Tech — નવા અપડેટ્સ</p>
+      </div>
+    </a>
+
+    <a href="https://instagram.com/het0.2674/" target="_blank" class="card">
+      <div class="icon">📸</div>
+      <div class="card-info">
+        <h3>Instagram (@het0.2674)</h3>
+        <p>શોર્ટ Reels, AI ટિપ્સ અને નવા પ્રોજેક્ટ્સની ઝલક</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="footer">
+    <div class="visit">Made with ❤️ by <strong>Het Patel</strong> • 2026</div>
+  </div>
+</div>
+
 </body>
 </html>
