@@ -15,10 +15,12 @@
         .tab { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); background: #1e293b; color: #cbd5e1; font-weight: 700; cursor: pointer; text-align: center; }
         .tab.active { background: linear-gradient(135deg, #0284c7, #4f46e5); color: white; border-color: transparent; }
         .panel { width: 100%; max-width: 550px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 16px; }
-        canvas { width: 100%; max-width: 400px; display: block; margin: 0 auto; background: #030712; border-radius: 50%; border: 2px solid #312e81; }
-        .planet-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px; }
+        canvas { width: 100%; max-width: 400px; display: block; margin: 0 auto; background: #030712; border-radius: 50%; border: 2px solid #312e81; cursor: pointer; }
+        .ctrl-row { display: flex; justify-content: center; gap: 10px; margin-top: 12px; }
+        .btn-pause { padding: 8px 18px; background: linear-gradient(135deg, #facc15, #f59e0b); color: #0f172a; border: none; border-radius: 20px; font-size: 0.9rem; font-weight: 800; cursor: pointer; }
+        .planet-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px; }
         .p-btn { padding: 8px 4px; background: #1e293b; border: 1px solid #38bdf8; color: white; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
-        .p-btn:hover { background: #38bdf8; color: #0f172a; }
+        .p-btn.selected { background: #38bdf8; color: #0f172a; font-weight: 800; box-shadow: 0 0 10px #38bdf8; }
         .info-card { margin-top: 14px; background: #1e293b; padding: 14px; border-radius: 12px; border-left: 4px solid #facc15; }
         .info-card h3 { color: #facc15; margin-bottom: 6px; font-size: 1.05rem; }
         .info-card p { font-size: 0.9rem; line-height: 1.5; color: #e2e8f0; }
@@ -42,10 +44,13 @@
     <!-- Solar System Section -->
     <div id="solarPanel" class="panel">
         <canvas id="solarCanvas" width="400" height="400"></canvas>
-        <div class="planet-btns">
+        <div class="ctrl-row">
+            <button id="pauseBtn" class="btn-pause" onclick="toggleMotion()">⏸️ ગતિ રોકો (Pause)</button>
+        </div>
+        <div class="planet-btns" id="pBtns">
             <button class="p-btn" onclick="selectPlanet(0)">☿ બુધ</button>
             <button class="p-btn" onclick="selectPlanet(1)">♀ શુક્ર</button>
-            <button class="p-btn" onclick="selectPlanet(2)">🌍 પૃથ્વી</button>
+            <button class="p-btn selected" onclick="selectPlanet(2)">🌍 પૃથ્વી</button>
             <button class="p-btn" onclick="selectPlanet(3)">♂ મંગળ</button>
             <button class="p-btn" onclick="selectPlanet(4)">♃ ગુરુ</button>
             <button class="p-btn" onclick="selectPlanet(5)">♄ શનિ</button>
@@ -54,7 +59,7 @@
         </div>
         <div class="info-card" id="planetInfo">
             <h3>🌍 પૃથ્વી (Earth)</h3>
-            <p>સૂર્યથી ત્રીજો ગ્રહ અને જીવન ધરાવતો એકમાત્ર જાણીતો ગ્રહ. તેની સપાટી પર ૭૧% પાણી હોવાથી તેને 'નીલો ગ્રહ' કહે છે. ઉપગ્રહ: ૧ (ચંદ્ર).</p>
+            <p>સૂર્યથી ત્રીજો ગ્રહ અને જીવન ધરાવતો એકમાત્ર જાણીતો ગ્રહ. ૭૧% પાણી હોવાથી 'નીલો ગ્રહ' કહેવાય.</p>
         </div>
     </div>
 
@@ -67,12 +72,15 @@
             <input type="range" id="phSlider" min="0" max="14" value="7" oninput="updatePH()">
             <div class="info-card" id="phInfo" style="text-align:left;">
                 <h3>💧 શુદ્ધ પાણી (pH = 7)</h3>
-                <p>સ્વભાવ: તટસ્થ (Neutral). લિટમસ પેપર પર કોઈ અસર થતી નથી (રંગ બદલાતો નથી).</p>
+                <p>સ્વભાવ: તટસ્થ (Neutral). લિટમસ પેપર પર કોઈ અસર થતી નથી.</p>
             </div>
         </div>
     </div>
 
 <script>
+    let isMoving = true;
+    let selectedIdx = 2;
+
     function showTab(tab, btn) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
@@ -80,28 +88,51 @@
         document.getElementById('phPanel').style.display = tab === 'ph' ? 'block' : 'none';
     }
 
+    function toggleMotion() {
+        isMoving = !isMoving;
+        document.getElementById('pauseBtn').innerText = isMoving ? "⏸️ ગતિ રોકો (Pause)" : "▶️ ગતિ ચાલુ કરો (Play)";
+    }
+
     const planets = [
-        { name: "☿ બુધ (Mercury)", r: 34, size: 4, color: "#a8a29e", spd: 0.04, ang: 0, desc: "સૂર્યની સૌથી નજીકનો અને સૌથી નાનો ગ્રહ. તેને કોઈ ઉપગ્રહ નથી." },
-        { name: "♀ શુક્ર (Venus)", r: 52, size: 6, color: "#fde047", spd: 0.03, ang: 1, desc: "સૌથી તેજસ્વી અને સૌથી ગરમ ગ્રહ (સવારનો તારો / સાંજનો તારો). પૃથ્વીનો જોડિયો ગ્રહ." },
-        { name: "🌍 પૃથ્વી (Earth)", r: 74, size: 7, color: "#38bdf8", spd: 0.022, ang: 2, desc: "સૂર્યથી ત્રીજો ગ્રહ અને જીવન ધરાવતો એકમાત્ર જાણીતો ગ્રહ. ૭૧% પાણી હોવાથી 'નીલો ગ્રહ' કહેવાય." },
-        { name: "♂ મંગળ (Mars)", r: 96, size: 5.5, color: "#ef4444", spd: 0.017, ang: 3, desc: "લોહ-ઓક્સાઇડને કારણે 'લાલ ગ્રહ' તરીકે ઓળખાય છે. બે ઉપગ્રહ: ફોબોસ અને ડીમોસ." },
-        { name: "♃ ગુરુ (Jupiter)", r: 122, size: 11, color: "#fb923c", spd: 0.011, ang: 4, desc: "સૂર્યમંડળનો સૌથી મોટો ગ્રહ. તેના પર વિશાળ લાલ ધબ્બો (Great Red Spot) આવેલો છે." },
-        { name: "♄ શનિ (Saturn)", r: 148, size: 9.5, color: "#eab308", spd: 0.008, ang: 5, desc: "સુંદર વલયો (Rings) ધરાવતો ગ્રહ. તેની ઘનતા પાણી કરતાં પણ ઓછી છે." },
-        { name: "♅ યુરેનસ (Uranus)", r: 170, size: 8, color: "#2dd4bf", spd: 0.006, ang: 1.5, desc: "મિથેન વાયુને કારણે આછા લીલા-વાદળી રંગનો દેખાય છે. સૌથી ઠંડો ગ્રહ." },
-        { name: "♆ નેપ્ચ્યુન (Neptune)", r: 190, size: 8, color: "#6366f1", spd: 0.004, ang: 3.5, desc: "સૂર્યથી સૌથી દૂરનો ગ્રહ. અહીં અત્યંત તેજ પવનો ફૂંકાય છે." }
+        { name: "☿ બુધ (Mercury)", r: 34, size: 4, color: "#a8a29e", spd: 0.04, ang: 0, x: 0, y: 0, desc: "સૂર્યની સૌથી નજીકનો અને સૌથી નાનો ગ્રહ. તેને કોઈ ઉપગ્રહ નથી." },
+        { name: "♀ શુક્ર (Venus)", r: 52, size: 6, color: "#fde047", spd: 0.03, ang: 1, x: 0, y: 0, desc: "સૌથી તેજસ્વી અને સૌથી ગરમ ગ્રહ (સવારનો તારો / સાંજનો તારો). પૃથ્વીનો જોડિયો ગ્રહ." },
+        { name: "🌍 પૃથ્વી (Earth)", r: 74, size: 7, color: "#38bdf8", spd: 0.022, ang: 2, x: 0, y: 0, desc: "સૂર્યથી ત્રીજો ગ્રહ અને જીવન ધરાવતો એકમાત્ર જાણીતો ગ્રહ. ૭૧% પાણી હોવાથી 'નીલો ગ્રહ' કહેવાય." },
+        { name: "♂ મંગળ (Mars)", r: 96, size: 5.5, color: "#ef4444", spd: 0.017, ang: 3, x: 0, y: 0, desc: "લોહ-ઓક્સાઇડને કારણે 'લાલ ગ્રહ' તરીકે ઓળખાય છે. બે ઉપગ્રહ: ફોબોસ અને ડીમોસ." },
+        { name: "♃ ગુરુ (Jupiter)", r: 122, size: 11, color: "#fb923c", spd: 0.011, ang: 4, x: 0, y: 0, desc: "સૂર્યમંડળનો સૌથી મોટો ગ્રહ. તેના પર વિશાળ લાલ ધબ્બો (Great Red Spot) આવેલો છે." },
+        { name: "♄ શનિ (Saturn)", r: 148, size: 9.5, color: "#eab308", spd: 0.008, ang: 5, x: 0, y: 0, desc: "સુંદર વલયો (Rings) ધરાવતો ગ્રહ. તેની ઘનતા પાણી કરતાં પણ ઓછી છે." },
+        { name: "♅ યુરેનસ (Uranus)", r: 170, size: 8, color: "#2dd4bf", spd: 0.006, ang: 1.5, x: 0, y: 0, desc: "મિથેન વાયુને કારણે આછા લીલા-વાદળી રંગનો દેખાય છે. સૌથી ઠંડો ગ્રહ." },
+        { name: "♆ નેપ્ચ્યુન (Neptune)", r: 190, size: 8, color: "#6366f1", spd: 0.004, ang: 3.5, x: 0, y: 0, desc: "સૂર્યથી સૌથી દૂરનો ગ્રહ. અહીં અત્યંત તેજ પવનો ફૂંકાય છે." }
     ];
 
     function selectPlanet(idx) {
+        selectedIdx = idx;
         const p = planets[idx];
         document.getElementById('planetInfo').innerHTML = `<h3>${p.name}</h3><p>${p.desc}</p>`;
+        document.querySelectorAll('#pBtns .p-btn').forEach((b, i) => {
+            b.classList.toggle('selected', i === idx);
+        });
     }
 
     const sCanvas = document.getElementById('solarCanvas');
     const sCtx = sCanvas.getContext('2d');
 
+    sCanvas.addEventListener('click', e => {
+        const rect = sCanvas.getBoundingClientRect();
+        const scaleX = 400 / rect.width;
+        const scaleY = 400 / rect.height;
+        const clickX = (e.clientX - rect.left) * scaleX;
+        const clickY = (e.clientY - rect.top) * scaleY;
+
+        planets.forEach((p, idx) => {
+            const dist = Math.hypot(clickX - p.x, clickY - p.y);
+            if (dist <= p.size + 14) {
+                selectPlanet(idx);
+            }
+        });
+    });
+
     function animateSolar() {
         sCtx.clearRect(0, 0, 400, 400);
-        // Sun
         sCtx.beginPath();
         sCtx.arc(200, 200, 18, 0, Math.PI * 2);
         sCtx.fillStyle = "#facc15";
@@ -110,17 +141,29 @@
         sCtx.fill();
         sCtx.shadowBlur = 0;
 
-        planets.forEach(p => {
-            p.ang += p.spd;
+        planets.forEach((p, idx) => {
+            if (isMoving) p.ang += p.spd;
+            const isSel = idx === selectedIdx;
+
             sCtx.beginPath();
             sCtx.arc(200, 200, p.r, 0, Math.PI * 2);
-            sCtx.strokeStyle = "rgba(255,255,255,0.12)";
+            sCtx.strokeStyle = isSel ? "rgba(250, 204, 21, 0.65)" : "rgba(255,255,255,0.12)";
+            sCtx.lineWidth = isSel ? 2 : 1;
             sCtx.stroke();
 
-            const x = 200 + Math.cos(p.ang) * p.r;
-            const y = 200 + Math.sin(p.ang) * p.r;
+            p.x = 200 + Math.cos(p.ang) * p.r;
+            p.y = 200 + Math.sin(p.ang) * p.r;
+
+            if (isSel) {
+                sCtx.beginPath();
+                sCtx.arc(p.x, p.y, p.size + 6, 0, Math.PI * 2);
+                sCtx.strokeStyle = "#fde047";
+                sCtx.lineWidth = 2;
+                sCtx.stroke();
+            }
+
             sCtx.beginPath();
-            sCtx.arc(x, y, p.size, 0, Math.PI * 2);
+            sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             sCtx.fillStyle = p.color;
             sCtx.fill();
         });
